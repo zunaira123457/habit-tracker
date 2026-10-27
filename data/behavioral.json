@@ -1,0 +1,578 @@
+{
+  "themes": [
+    {
+      "id": "conflict",
+      "name": "Conflict"
+    },
+    {
+      "id": "failure",
+      "name": "Failure"
+    },
+    {
+      "id": "leadership",
+      "name": "Leadership"
+    },
+    {
+      "id": "ambiguity",
+      "name": "Ambiguity"
+    },
+    {
+      "id": "teamwork",
+      "name": "Teamwork"
+    },
+    {
+      "id": "ownership",
+      "name": "Ownership"
+    },
+    {
+      "id": "deadlines",
+      "name": "Tight deadlines"
+    },
+    {
+      "id": "disagree-manager",
+      "name": "Disagreeing with a manager"
+    },
+    {
+      "id": "influence",
+      "name": "Influence without authority"
+    },
+    {
+      "id": "feedback",
+      "name": "Giving and receiving feedback"
+    },
+    {
+      "id": "prioritization",
+      "name": "Prioritization"
+    },
+    {
+      "id": "growth",
+      "name": "Learning and growth"
+    },
+    {
+      "id": "customer",
+      "name": "Customer focus"
+    }
+  ],
+  "questions": [
+    {
+      "id": "conflict-01",
+      "theme": "conflict",
+      "text": "Tell me about a time you had a conflict with a teammate. How did you resolve it?"
+    },
+    {
+      "id": "conflict-02",
+      "theme": "conflict",
+      "text": "Describe a situation where two people on your team strongly disagreed. What role did you play?"
+    },
+    {
+      "id": "conflict-03",
+      "theme": "conflict",
+      "text": "Tell me about a time you worked with someone whose working style was very different from yours."
+    },
+    {
+      "id": "conflict-04",
+      "theme": "conflict",
+      "text": "Describe a time you had to work closely with someone you didn't get along with."
+    },
+    {
+      "id": "conflict-05",
+      "theme": "conflict",
+      "text": "Tell me about a time a code review turned into a disagreement. How did you handle it?"
+    },
+    {
+      "id": "conflict-06",
+      "theme": "conflict",
+      "text": "Describe a time you had to deliver an unpopular decision to your team or a peer."
+    },
+    {
+      "id": "conflict-07",
+      "theme": "conflict",
+      "text": "Tell me about a time you helped resolve a conflict between your team and another team."
+    },
+    {
+      "id": "conflict-08",
+      "theme": "conflict",
+      "text": "Tell me about a time someone was frustrated with you. What did you do?"
+    },
+    {
+      "id": "failure-01",
+      "theme": "failure",
+      "text": "Tell me about a time you failed. What did you learn?"
+    },
+    {
+      "id": "failure-02",
+      "theme": "failure",
+      "text": "Describe a project that didn't go as planned. What would you do differently?"
+    },
+    {
+      "id": "failure-03",
+      "theme": "failure",
+      "text": "Tell me about a mistake you made that affected other people. How did you handle it?"
+    },
+    {
+      "id": "failure-04",
+      "theme": "failure",
+      "text": "Describe a time you shipped a bug to production. What happened next?"
+    },
+    {
+      "id": "failure-05",
+      "theme": "failure",
+      "text": "Tell me about a time you missed a commitment you made."
+    },
+    {
+      "id": "failure-06",
+      "theme": "failure",
+      "text": "Describe a decision you made that turned out to be wrong."
+    },
+    {
+      "id": "failure-07",
+      "theme": "failure",
+      "text": "Tell me about a time you underestimated how hard something would be."
+    },
+    {
+      "id": "failure-08",
+      "theme": "failure",
+      "text": "Tell me about a time you got a disappointing result, like a bad grade, review or outcome, and how you responded."
+    },
+    {
+      "id": "leadership-01",
+      "theme": "leadership",
+      "text": "Tell me about a time you led a project from start to finish."
+    },
+    {
+      "id": "leadership-02",
+      "theme": "leadership",
+      "text": "Describe a time you took the lead without being asked."
+    },
+    {
+      "id": "leadership-03",
+      "theme": "leadership",
+      "text": "Tell me about a time you had to motivate a team that was losing momentum."
+    },
+    {
+      "id": "leadership-04",
+      "theme": "leadership",
+      "text": "Describe a time you mentored someone or helped them grow."
+    },
+    {
+      "id": "leadership-05",
+      "theme": "leadership",
+      "text": "Tell me about a time you had to delegate work. How did you decide who did what?"
+    },
+    {
+      "id": "leadership-06",
+      "theme": "leadership",
+      "text": "Describe a time you set the technical direction for a project."
+    },
+    {
+      "id": "leadership-07",
+      "theme": "leadership",
+      "text": "Tell me about a time you had to make a decision on behalf of your team."
+    },
+    {
+      "id": "leadership-08",
+      "theme": "leadership",
+      "text": "Describe a time you helped a struggling teammate succeed."
+    },
+    {
+      "id": "ambiguity-01",
+      "theme": "ambiguity",
+      "text": "Tell me about a time you had to work with unclear or incomplete requirements."
+    },
+    {
+      "id": "ambiguity-02",
+      "theme": "ambiguity",
+      "text": "Describe a time you had to make a decision without all the information you wanted."
+    },
+    {
+      "id": "ambiguity-03",
+      "theme": "ambiguity",
+      "text": "Tell me about a time a project's goals changed partway through."
+    },
+    {
+      "id": "ambiguity-04",
+      "theme": "ambiguity",
+      "text": "Describe a time you had to solve a problem nobody on your team had solved before."
+    },
+    {
+      "id": "ambiguity-05",
+      "theme": "ambiguity",
+      "text": "Tell me about a time you had to learn a new codebase or system quickly with little documentation."
+    },
+    {
+      "id": "ambiguity-06",
+      "theme": "ambiguity",
+      "text": "Describe a situation where priorities kept shifting. How did you keep making progress?"
+    },
+    {
+      "id": "ambiguity-07",
+      "theme": "ambiguity",
+      "text": "Tell me about a time you turned a vague idea into a concrete plan."
+    },
+    {
+      "id": "ambiguity-08",
+      "theme": "ambiguity",
+      "text": "Describe a time you had to choose between two reasonable approaches with no clear winner."
+    },
+    {
+      "id": "teamwork-01",
+      "theme": "teamwork",
+      "text": "Tell me about your favorite team project and your specific role in it."
+    },
+    {
+      "id": "teamwork-02",
+      "theme": "teamwork",
+      "text": "Describe a time you helped a teammate even though it wasn't your responsibility."
+    },
+    {
+      "id": "teamwork-03",
+      "theme": "teamwork",
+      "text": "Tell me about a time your team succeeded because of good collaboration."
+    },
+    {
+      "id": "teamwork-04",
+      "theme": "teamwork",
+      "text": "Describe a time a team member wasn't pulling their weight. What did you do?"
+    },
+    {
+      "id": "teamwork-05",
+      "theme": "teamwork",
+      "text": "Tell me about a time you worked with people from a different discipline, like design, product or data."
+    },
+    {
+      "id": "teamwork-06",
+      "theme": "teamwork",
+      "text": "Describe a time you had to rely on someone else to finish your work."
+    },
+    {
+      "id": "teamwork-07",
+      "theme": "teamwork",
+      "text": "Tell me about a time you helped a new team member get up to speed."
+    },
+    {
+      "id": "teamwork-08",
+      "theme": "teamwork",
+      "text": "Describe a time you put the team's goal ahead of your own preferences."
+    },
+    {
+      "id": "ownership-01",
+      "theme": "ownership",
+      "text": "Tell me about a time you took ownership of a problem that wasn't assigned to you."
+    },
+    {
+      "id": "ownership-02",
+      "theme": "ownership",
+      "text": "Describe a time you noticed something broken and fixed it without being asked."
+    },
+    {
+      "id": "ownership-03",
+      "theme": "ownership",
+      "text": "Tell me about a time you saw a project through even after it got difficult or tedious."
+    },
+    {
+      "id": "ownership-04",
+      "theme": "ownership",
+      "text": "Describe a time you went beyond the requirements to make something better."
+    },
+    {
+      "id": "ownership-05",
+      "theme": "ownership",
+      "text": "Tell me about a time you improved a process for your team."
+    },
+    {
+      "id": "ownership-06",
+      "theme": "ownership",
+      "text": "Describe a time you had to clean up after someone else's mistake."
+    },
+    {
+      "id": "ownership-07",
+      "theme": "ownership",
+      "text": "Tell me about something you built that you're especially proud of."
+    },
+    {
+      "id": "ownership-08",
+      "theme": "ownership",
+      "text": "Describe a time you held yourself accountable for a result, good or bad."
+    },
+    {
+      "id": "deadlines-01",
+      "theme": "deadlines",
+      "text": "Tell me about a time you had to deliver under a tight deadline."
+    },
+    {
+      "id": "deadlines-02",
+      "theme": "deadlines",
+      "text": "Describe a time you had to cut scope to ship on time. How did you decide what to cut?"
+    },
+    {
+      "id": "deadlines-03",
+      "theme": "deadlines",
+      "text": "Tell me about a time you were juggling several deadlines at once."
+    },
+    {
+      "id": "deadlines-04",
+      "theme": "deadlines",
+      "text": "Describe a time you realized you were going to miss a deadline. What did you do?"
+    },
+    {
+      "id": "deadlines-05",
+      "theme": "deadlines",
+      "text": "Tell me about a time you shipped a quick fix and then followed up with a long-term fix."
+    },
+    {
+      "id": "deadlines-06",
+      "theme": "deadlines",
+      "text": "Describe a time you worked under pressure and still kept the quality high."
+    },
+    {
+      "id": "deadlines-07",
+      "theme": "deadlines",
+      "text": "Tell me about a time a deadline was moved up unexpectedly."
+    },
+    {
+      "id": "deadlines-08",
+      "theme": "deadlines",
+      "text": "Describe a time you had to choose between moving fast and doing it the right way."
+    },
+    {
+      "id": "disagree-manager-01",
+      "theme": "disagree-manager",
+      "text": "Tell me about a time you disagreed with your manager. What happened?"
+    },
+    {
+      "id": "disagree-manager-02",
+      "theme": "disagree-manager",
+      "text": "Describe a time you pushed back on a request from someone more senior."
+    },
+    {
+      "id": "disagree-manager-03",
+      "theme": "disagree-manager",
+      "text": "Tell me about a time you were asked to do something you thought was a bad idea."
+    },
+    {
+      "id": "disagree-manager-04",
+      "theme": "disagree-manager",
+      "text": "Describe a time you changed your manager's or a lead's mind."
+    },
+    {
+      "id": "disagree-manager-05",
+      "theme": "disagree-manager",
+      "text": "Tell me about a time you disagreed with a decision but committed to it anyway."
+    },
+    {
+      "id": "disagree-manager-06",
+      "theme": "disagree-manager",
+      "text": "Describe a time you raised a concern that others didn't want to hear."
+    },
+    {
+      "id": "disagree-manager-07",
+      "theme": "disagree-manager",
+      "text": "Tell me about a time your manager gave you feedback you disagreed with."
+    },
+    {
+      "id": "disagree-manager-08",
+      "theme": "disagree-manager",
+      "text": "Describe a time you had to say no to a stakeholder."
+    },
+    {
+      "id": "influence-01",
+      "theme": "influence",
+      "text": "Tell me about a time you convinced others to adopt your idea."
+    },
+    {
+      "id": "influence-02",
+      "theme": "influence",
+      "text": "Describe a time you persuaded a team you didn't manage to change something."
+    },
+    {
+      "id": "influence-03",
+      "theme": "influence",
+      "text": "Tell me about a time you used data to change someone's mind."
+    },
+    {
+      "id": "influence-04",
+      "theme": "influence",
+      "text": "Describe a time you got buy-in for a technical change, like a new tool or a refactor."
+    },
+    {
+      "id": "influence-05",
+      "theme": "influence",
+      "text": "Tell me about a time you had to influence someone more experienced than you."
+    },
+    {
+      "id": "influence-06",
+      "theme": "influence",
+      "text": "Describe a time your proposal was rejected. What did you do next?"
+    },
+    {
+      "id": "influence-07",
+      "theme": "influence",
+      "text": "Tell me about a time you built agreement among people with different goals."
+    },
+    {
+      "id": "influence-08",
+      "theme": "influence",
+      "text": "Describe a time you explained a technical idea to a non-technical audience."
+    },
+    {
+      "id": "feedback-01",
+      "theme": "feedback",
+      "text": "Tell me about the most useful feedback you've received. What did you do with it?"
+    },
+    {
+      "id": "feedback-02",
+      "theme": "feedback",
+      "text": "Describe a time you gave difficult feedback to a peer."
+    },
+    {
+      "id": "feedback-03",
+      "theme": "feedback",
+      "text": "Tell me about a time you received critical feedback. How did you respond?"
+    },
+    {
+      "id": "feedback-04",
+      "theme": "feedback",
+      "text": "Describe a time you asked for feedback so you could improve."
+    },
+    {
+      "id": "feedback-05",
+      "theme": "feedback",
+      "text": "Tell me about a time feedback changed how you work."
+    },
+    {
+      "id": "feedback-06",
+      "theme": "feedback",
+      "text": "Describe a time you gave feedback to someone more senior than you."
+    },
+    {
+      "id": "feedback-07",
+      "theme": "feedback",
+      "text": "Tell me about a time a code review comment taught you something."
+    },
+    {
+      "id": "feedback-08",
+      "theme": "feedback",
+      "text": "Describe a time you had to tell someone their work wasn't good enough."
+    },
+    {
+      "id": "prioritization-01",
+      "theme": "prioritization",
+      "text": "Tell me about a time you had more work than you could finish. How did you prioritize?"
+    },
+    {
+      "id": "prioritization-02",
+      "theme": "prioritization",
+      "text": "Describe a time you said no to a task so you could focus on something more important."
+    },
+    {
+      "id": "prioritization-03",
+      "theme": "prioritization",
+      "text": "Tell me about a time you balanced new features against technical debt."
+    },
+    {
+      "id": "prioritization-04",
+      "theme": "prioritization",
+      "text": "Describe how you decided what to work on first in a recent project."
+    },
+    {
+      "id": "prioritization-05",
+      "theme": "prioritization",
+      "text": "Tell me about a time an urgent issue interrupted your planned work."
+    },
+    {
+      "id": "prioritization-06",
+      "theme": "prioritization",
+      "text": "Describe a time you changed priorities based on new information."
+    },
+    {
+      "id": "prioritization-07",
+      "theme": "prioritization",
+      "text": "Tell me about a time two important stakeholders needed your help at once. Who did you help first?"
+    },
+    {
+      "id": "prioritization-08",
+      "theme": "prioritization",
+      "text": "Describe a time you found a way to get more impact with less effort."
+    },
+    {
+      "id": "growth-01",
+      "theme": "growth",
+      "text": "Tell me about a time you had to learn a new technology quickly."
+    },
+    {
+      "id": "growth-02",
+      "theme": "growth",
+      "text": "Describe the hardest technical problem you've solved."
+    },
+    {
+      "id": "growth-03",
+      "theme": "growth",
+      "text": "Tell me about a skill you deliberately worked to improve."
+    },
+    {
+      "id": "growth-04",
+      "theme": "growth",
+      "text": "Describe a time you stepped outside your comfort zone."
+    },
+    {
+      "id": "growth-05",
+      "theme": "growth",
+      "text": "Tell me about a time you taught yourself something to unblock a project."
+    },
+    {
+      "id": "growth-06",
+      "theme": "growth",
+      "text": "Describe a time you realized your approach was outdated and changed it."
+    },
+    {
+      "id": "growth-07",
+      "theme": "growth",
+      "text": "Tell me about something you're learning right now and why."
+    },
+    {
+      "id": "growth-08",
+      "theme": "growth",
+      "text": "Describe a time curiosity led you to a better solution."
+    },
+    {
+      "id": "customer-01",
+      "theme": "customer",
+      "text": "Tell me about a time you went out of your way to help a user or customer."
+    },
+    {
+      "id": "customer-02",
+      "theme": "customer",
+      "text": "Describe a time you used user feedback to change what you built."
+    },
+    {
+      "id": "customer-03",
+      "theme": "customer",
+      "text": "Tell me about a time you balanced what a customer asked for with what they actually needed."
+    },
+    {
+      "id": "customer-04",
+      "theme": "customer",
+      "text": "Describe a time you improved the experience for the people using your product."
+    },
+    {
+      "id": "customer-05",
+      "theme": "customer",
+      "text": "Tell me about a time you dealt with a difficult user or client."
+    },
+    {
+      "id": "customer-06",
+      "theme": "customer",
+      "text": "Describe a time you advocated for users in a decision."
+    },
+    {
+      "id": "customer-07",
+      "theme": "customer",
+      "text": "Tell me about a time you fixed a problem that users kept running into."
+    },
+    {
+      "id": "customer-08",
+      "theme": "customer",
+      "text": "Describe a time you measured whether something you built actually helped users."
+    }
+  ]
+}

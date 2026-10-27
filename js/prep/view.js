@@ -4,12 +4,14 @@
 import { $, $$, esc, ic, pad } from '../util.js';
 import { state, ui, saveUI } from '../store.js';
 import { toast } from '../ui.js';
-import { prep, savePrep, prepLevel, dayProgress } from './state.js';
+import { prep, savePrep, prepLevel, dayProgress, SECTION_TARGET } from './state.js';
 import {
   loadCatalog, catalogReady, ensureDay, problemOf, slotSeconds, toggleTimer, markResult, undoResult,
   skipSlot, unskip, progressStats, formatDate,
 } from './plan.js';
 import { askAI } from './ai.js';
+import { loadBank, bankReady, ensureBehavioral } from './behavioral.js';
+import { initBehavioral, renderBehavioralToday, renderLibrary } from './behavioral-view.js';
 import { renderMarkdown } from './markdown.js';
 
 const today = () => state.currentDay;
@@ -123,30 +125,45 @@ function renderProgress() {
       </li>`).join('')}</ul>`;
 }
 
-export function renderPrep() { renderProblems(); renderProgress(); }
+let tab = 'today';
+function showTab(t) {
+  tab = t;
+  $$('#prep-tabs [data-ptab]').forEach(b => b.setAttribute('aria-pressed', b.dataset.ptab === t));
+  $('#prep-today-pane').hidden = t !== 'today';
+  $('#prep-library-pane').hidden = t !== 'library';
+  if (t === 'library') renderLibrary();
+}
+export function renderPrep() { renderProblems(); renderProgress(); renderBehavioralToday(); if (tab === 'library') renderLibrary(); }
 
 /* ================= Today checklist ================= */
 export function renderChecklist() {
   const box = $('#prep-check'); if (!box) return;
   if (catalogReady()) ensureDay(today());
+  if (bankReady()) ensureBehavioral(today());
   const level = prepLevel(today());
-  const { done, total } = dayProgress(today()).leetcode;
-  const lightMin = prep.settings.lightDay.leetcode;
+  const prog = dayProgress(today());
+  const min = prep.settings.lightDay;
+  const lightText = [min.leetcode ? `${min.leetcode} problem${min.leetcode > 1 ? 's' : ''}` : '', min.behavioral ? `${min.behavioral} behavioral` : ''].filter(Boolean).join(' + ');
+  const row = (emoji, name, p, target) => {
+    const total = p.total || target, pct = p.total ? p.done / p.total : 0;
+    return `<li class="row check-row ${p.total && p.done === p.total ? 'done' : ''}">
+        <div class="status">${ringSVG(pct)}</div>
+        <div class="row-main">
+          <div class="row-title"><span class="row-emoji" aria-hidden="true">${emoji}</span><span class="row-name">${name}</span></div>
+          <div class="row-progress"><div class="pbar"><div class="pfill" style="width:${pct * 100}%"></div></div><span class="amount">${p.done} <small>/ ${total}</small></span></div>
+        </div>
+        <div class="row-actions"><button class="btn btn-secondary btn-sm" data-goto="prep">Open${ic('right')}</button></div>
+      </li>`;
+  };
   box.innerHTML = `
     <header class="group-head">
       <div><h2>Interview Prep${prep.enabled ? `<span class="req" title="Required daily to keep your streak">${ic('lock')}Non-negotiable</span>` : ''}</h2>
-        <p>${prep.enabled ? `Full day: all ${total || 3} problems · Light day: ${lightMin}` : "Doesn't count toward your streak (turned off in Settings)"}</p></div>
+        <p>${prep.enabled ? `Full day: everything below · Light day: ${lightText}` : "Doesn't count toward your streak (turned off in Settings)"}</p></div>
       <span class="count level-${level}">${level === 'none' ? '' : ic('check').replace('class="ic"', 'class="ic sm"')}${LEVEL_TEXT[level]}</span>
     </header>
     <ul class="rows">
-      <li class="row check-row ${total && done === total ? 'done' : ''}">
-        <div class="status">${ringSVG(total ? done / total : 0)}</div>
-        <div class="row-main">
-          <div class="row-title"><span class="row-emoji" aria-hidden="true">🧩</span><span class="row-name">NeetCode problems</span></div>
-          <div class="row-progress"><div class="pbar"><div class="pfill" style="width:${total ? done / total * 100 : 0}%"></div></div><span class="amount">${done} <small>/ ${total || 3}</small></span></div>
-        </div>
-        <div class="row-actions"><button class="btn btn-secondary btn-sm" data-goto="prep">Open${ic('right')}</button></div>
-      </li>
+      ${row('🧩', 'NeetCode problems', prog.leetcode, SECTION_TARGET.leetcode)}
+      ${row('🎤', 'Behavioral questions', prog.behavioral, SECTION_TARGET.behavioral)}
     </ul>`;
 }
 const RING_C = 94.25;
@@ -161,8 +178,11 @@ export function renderPrepSettings() {
       <div><input type="checkbox" class="switch" role="switch" id="prep-enabled" ${prep.enabled ? 'checked' : ''}></div>
     </div>
     <div class="set-row">
-      <div><h3><label for="light-lc">Light day minimum</label></h3><p>Problems that still keep your streak on a busy day. A light day gives ${4} XP instead of 10.</p></div>
-      <div class="inline-field"><input class="input" id="light-lc" type="number" min="1" max="3" step="1" value="${prep.settings.lightDay.leetcode}"><span>NeetCode problems</span></div>
+      <div><h3 id="light-h">Light day minimum</h3><p>What still keeps your streak on a busy day. A light day gives 4 XP instead of 10.</p></div>
+      <div class="light-fields" role="group" aria-labelledby="light-h">
+        <div class="inline-field"><input class="input" id="light-lc" type="number" min="0" max="3" step="1" value="${prep.settings.lightDay.leetcode}" aria-label="NeetCode problems"><span>NeetCode problems</span></div>
+        <div class="inline-field"><input class="input" id="light-bq" type="number" min="0" max="2" step="1" value="${prep.settings.lightDay.behavioral}" aria-label="Behavioral questions"><span>behavioral questions</span></div>
+      </div>
     </div>
     <div class="set-row">
       <div><h3><label for="ai-passcode">AI passcode</label></h3><p>Must match <code>APP_PASSCODE</code> on the server. Saved only on this device.</p></div>
@@ -213,6 +233,8 @@ function onClick(e) {
 
 export function initPrep() {
   $('#view-prep').addEventListener('click', onClick);
+  document.addEventListener('click', e => { const b = e.target.closest('[data-ptab]'); if (b) { if (!$('#view-prep').classList.contains('active')) location.hash = '#prep'; showTab(b.dataset.ptab); } });
+  initBehavioral();
   $('#view-prep').addEventListener('input', e => {
     if (e.target.dataset.pactInput !== 'notes') return;
     const slot = prep.days[today()]?.leetcode.find(s => s.slug === e.target.closest('.prob').dataset.slug);
@@ -220,9 +242,13 @@ export function initPrep() {
   });
   document.addEventListener('change', e => {
     if (e.target.id === 'prep-enabled') { prep.enabled = e.target.checked; savePrep(); renderChecklist(); changed(); toast(prep.enabled ? 'Interview Prep now counts toward your streak' : 'Interview Prep no longer affects your streak', 'success'); }
-    if (e.target.id === 'light-lc') {
-      const n = Math.min(3, Math.max(1, Math.round(Number(e.target.value) || 1)));
-      e.target.value = n; prep.settings.lightDay.leetcode = n; savePrep(); renderChecklist(); changed(); toast('Light day minimum saved', 'success');
+    if (e.target.id === 'light-lc' || e.target.id === 'light-bq') {
+      const field = e.target.id === 'light-lc' ? 'leetcode' : 'behavioral';
+      const max = SECTION_TARGET[field];
+      const n = Math.min(max, Math.max(0, Math.round(Number(e.target.value) || 0)));
+      const other = field === 'leetcode' ? 'behavioral' : 'leetcode';
+      if (n === 0 && !prep.settings.lightDay[other]) { e.target.value = prep.settings.lightDay[field]; toast('A light day needs at least one item.'); return; }
+      e.target.value = n; prep.settings.lightDay[field] = n; savePrep(); renderChecklist(); changed(); toast('Light day minimum saved', 'success');
     }
     if (e.target.id === 'ai-passcode') { ui.aiPasscode = e.target.value.trim(); saveUI(); toast('AI passcode saved on this device', 'success'); }
   });
@@ -236,5 +262,8 @@ export function initPrep() {
   loadCatalog()
     .then(() => { renderPrep(); renderChecklist(); changed(); })
     .catch(err => { loadError = err.message; renderPrep(); });
+  loadBank()
+    .then(() => { renderBehavioralToday(); renderChecklist(); changed(); })
+    .catch(err => { const l = $('#bq-list'); if (l) l.innerHTML = `<div class="empty"><b>Couldn't load questions</b><span>${esc(err.message)}</span></div>`; });
 }
 export { $$ };

@@ -152,7 +152,11 @@ A daily coding-interview plan that counts toward your streak like a non-negotiab
 - **Each card** has the difficulty, category, an *Open on LeetCode* link (plus a free NeetCode link for the 7 Premium problems), a timer, and **Solved / Struggled / Skip**. Skipping a new problem swaps in the next one; skipping a review moves it to tomorrow.
 - **Progress:** problems solved out of 250, progress per category, and a projected finish date at your recent pace.
 - **AI help in three steps:** a hint toward the pattern, then an approach outline, then a full explanation. Each level unlocks only after the previous one.
-- **Full vs. light days:** finishing all 3 problems is a full day (10 XP). Doing at least the light-day minimum (1 problem by default, adjustable in Settings) still keeps the streak and earns 4 XP.
+- **2 behavioral questions a day** from a bank of 104, across 13 themes (conflict, failure, leadership, ambiguity, ownership, tight deadlines, disagreeing with a manager and more). Themes rotate so the same one doesn't come back for about a week, and a question you've seen isn't repeated for at least a month, unless your answer scored below 6, which brings it back after two weeks.
+- **Answer by typing or speaking.** Voice answers use your browser's speech recognition (Chrome, Edge or Safari; Chrome sends the audio to Google to transcribe it). You see the live transcript and can fix misheard words. No audio is saved.
+- **AI feedback on every answer:** a score from 1 to 10; a rubric for STAR structure, specificity, your personal impact ("I" vs "we"), measurable results and length (aim for 1.5–2.5 minutes); 2–3 concrete improvements; and a stronger rewrite that uses only your real details, with [brackets] where you should add a number or fact. Spoken answers also get notes on filler words and pacing. Word counts, length, "I"/"we" counts, words per minute and filler words are measured by the app itself, not guessed by the AI.
+- **Story library:** every attempt is saved with its feedback. See your score history per question, your average over the last 10 answers, your strongest and weakest themes, and star your best answers as stories to reuse.
+- **Full vs. light days:** finishing all 3 problems and both questions is a full day (10 XP). Meeting the light-day minimum (1 problem + 1 behavioral question by default, adjustable in Settings) still keeps the streak and earns 4 XP.
 
 ### History calendar
 
@@ -193,7 +197,7 @@ On desktop:
 ## Your data and privacy
 
 - **Everything is stored in your browser** using `localStorage`. There is no account, no backend, and nothing is sent anywhere.
-- **Data is per browser, per device.** Your phone and your laptop each keep their own separate tracker. Clearing your browser's site data erases your habits.
+- **Data is per browser, per device.** Browsers allow about 5 MB per site, which is roughly a year or more of daily practice answers with feedback. Your phone and your laptop each keep their own separate tracker. Clearing your browser's site data erases your habits.
 - The only outside request is for the web fonts (Inter and Fredoka from Google Fonts). If they can't load, the app falls back to your system fonts.
 
 ---

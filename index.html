@@ -96,7 +96,12 @@
 
       <!-- ================= INTERVIEW PREP ================= -->
       <section id="view-prep" class="view" aria-labelledby="page-title">
-        <div class="prep-grid">
+        <div class="seg prep-tabs" id="prep-tabs" role="group" aria-label="Interview Prep sections">
+          <button type="button" data-ptab="today" aria-pressed="true">Today's plan</button>
+          <button type="button" data-ptab="library" aria-pressed="false">Story library</button>
+        </div>
+        <div id="prep-library-pane" class="hist-stack" hidden><div id="bq-library" class="hist-stack"></div></div>
+        <div class="prep-grid" id="prep-today-pane">
           <div class="prep-main">
             <section class="panel group" aria-labelledby="lc-h">
               <header class="group-head">
@@ -104,6 +109,13 @@
                 <span class="count" id="lc-count">0/0</span>
               </header>
               <div class="prob-list" id="lc-list"></div>
+            </section>
+            <section class="panel group" aria-labelledby="bq-h">
+              <header class="group-head">
+                <div><h2 id="bq-h">Today's behavioral questions</h2><p>Answer out loud or in writing. Aim for 1.5–2.5 minutes each.</p></div>
+                <span class="count" id="bq-count">0/0</span>
+              </header>
+              <div class="bq-list" id="bq-list"></div>
             </section>
           </div>
           <aside class="prep-side">
