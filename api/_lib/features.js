@@ -168,6 +168,76 @@ export const features = {
       tips: (Array.isArray(r.tips) ? r.tips : []).slice(0, 3).map(s => str(s, 400)),
     };
   },
+
+  /** One interviewer turn about a resume bullet: an opening question, a follow-up, or a finished assessment. */
+  async 'resume-turn'(input) {
+    const b = input.bullet || {};
+    const turns = (Array.isArray(input.turns) ? input.turns : []).slice(0, 6).map(t => ({ question: str(t.question, 600), answer: str(t.answer, 6000) }));
+    const maxFollowUps = Math.min(3, Math.max(0, Math.round(num(input.maxFollowUps ?? 2, 3))));
+    if (!str(b.text)) throw new AIError('Missing the resume bullet.', 400);
+    if (turns.some(t => !t.answer.trim())) throw new AIError('Answer the current question first.', 400);
+    const mustFinish = turns.length >= 1 + maxFollowUps;
+    const opening = turns.length === 0;
+    const content = [
+      `Bullet (${str(b.section, 20)}: ${str(b.context, 200)}): "${str(b.text, 800)}"`,
+      `Candidate's skills: ${(Array.isArray(input.skills) ? input.skills : []).slice(0, 40).map(x => str(x, 40)).join(', ') || 'not listed'}`,
+      opening ? 'There is no conversation yet. Ask the opening question.' : turns.map((t, i) => `${i === 0 ? 'Opening question' : `Follow-up ${i}`}: ${t.question}\nCandidate: ${t.answer}`).join('\n\n'),
+      opening ? '' : mustFinish ? 'You have reached the follow-up limit. Finish this bullet now with an assessment.' : `Follow-ups used: ${turns.length - 1} of ${maxFollowUps}. Ask a follow-up or finish.`,
+    ].filter(Boolean).join('\n\n');
+    const r = await generate({
+      prompt: 'resume-interviewer',
+      messages: [{ role: 'user', content }],
+      schema: RESUME_TURN_SCHEMA,
+      mock: () => opening ? { question: `Mock question: what was the hardest part of "${str(b.text, 60)}"?`, done: false, assessment: EMPTY_ASSESSMENT }
+        : (!mustFinish && turns.length === 1 && turns[0].answer.split(/\s+/).length < 25)
+          ? { question: 'Mock follow-up: what exactly did you do yourself, as opposed to the team?', done: false, assessment: EMPTY_ASSESSMENT }
+          : { question: '', done: true, assessment: { rating: turns.at(-1).answer.split(/\s+/).length > 40 ? 'strong' : 'okay', note: 'Mock assessment: clear on what you built; add how you measured the result.', practiceAgain: true, reword: '' } },
+    });
+    // Enforce the turn rules regardless of what the model chose.
+    const done = mustFinish || (!opening && !!r.done) || (!opening && !str(r.question).trim());
+    if (!done && !str(r.question).trim()) throw new AIError('The interviewer had no question. Try again.', 502);
+    const a = r.assessment || {};
+    return {
+      question: done ? '' : str(r.question, 600),
+      done,
+      assessment: done ? (rating => ({ rating, note: str(a.note, 800), practiceAgain: rating !== 'strong', reword: str(a.reword, 800) }))(
+        ['strong', 'okay', 'weak'].includes(a.rating) ? a.rating : 'okay') : null,
+    };
+  },
+
+  /** Debrief at the end of a resume session. */
+  async 'resume-summary'(input) {
+    const items = (Array.isArray(input.items) ? input.items : []).slice(0, 12);
+    if (!items.length) throw new AIError('Nothing to summarize yet.', 400);
+    const content = items.map((it, i) => [
+      `### Bullet ${i + 1}: "${str(it.text, 600)}"`,
+      ...(Array.isArray(it.turns) ? it.turns : []).slice(0, 6).map(t => `Q: ${str(t.question, 600)}\nA: ${str(t.answer, 4000)}`),
+      it.assessment ? `Assessment: ${str(it.assessment.rating, 10)}. ${str(it.assessment.note, 600)}` : 'Skipped.',
+    ].join('\n')).join('\n\n');
+    const r = await generate({
+      prompt: 'resume-summary',
+      messages: [{ role: 'user', content }],
+      schema: RESUME_SUMMARY_SCHEMA,
+      mock: () => ({ overall: 'Mock debrief: you explained what you built clearly but were vaguer on why and how you measured it.', strengths: ['Concrete about your own code.'], focus: ['Explain why you chose each technology.'], tips: ['Prepare one number for every bullet that claims an improvement.'] }),
+    });
+    const list = v => (Array.isArray(v) ? v : []).slice(0, 3).map(x => str(x, 400));
+    return { overall: str(r.overall, 1200), strengths: list(r.strengths), focus: list(r.focus), tips: list(r.tips) };
+  },
+};
+
+const EMPTY_ASSESSMENT = { rating: 'okay', note: '', practiceAgain: true, reword: '' };
+const RESUME_TURN_SCHEMA = {
+  type: 'object', additionalProperties: false, required: ['question', 'done', 'assessment'],
+  properties: {
+    question: { type: 'string' },
+    done: { type: 'boolean' },
+    assessment: { type: 'object', additionalProperties: false, required: ['rating', 'note', 'practiceAgain', 'reword'], properties: {
+      rating: { type: 'string', enum: ['strong', 'okay', 'weak'] }, note: { type: 'string' }, practiceAgain: { type: 'boolean' }, reword: { type: 'string' } } },
+  },
+};
+const RESUME_SUMMARY_SCHEMA = {
+  type: 'object', additionalProperties: false, required: ['overall', 'strengths', 'focus', 'tips'],
+  properties: { overall: { type: 'string' }, strengths: { type: 'array', items: { type: 'string' } }, focus: { type: 'array', items: { type: 'string' } }, tips: { type: 'array', items: { type: 'string' } } },
 };
 
 const REVIEW_SCHEMA = {

@@ -156,6 +156,7 @@ A daily coding-interview plan that counts toward your streak like a non-negotiab
 - **2 behavioral questions a day** from a bank of 104, across 13 themes (conflict, failure, leadership, ambiguity, ownership, tight deadlines, disagreeing with a manager and more). Themes rotate so the same one doesn't come back for about a week, and a question you've seen isn't repeated for at least a month, unless your answer scored below 6, which brings it back after two weeks.
 - **Answer by typing or speaking.** Voice answers use your browser's speech recognition (Chrome, Edge or Safari; Chrome sends the audio to Google to transcribe it). You see the live transcript and can fix misheard words. No audio is saved.
 - **AI feedback on every answer:** a score from 1 to 10; a rubric for STAR structure, specificity, your personal impact ("I" vs "we"), measurable results and length (aim for 1.5–2.5 minutes); 2–3 concrete improvements; and a stronger rewrite that uses only your real details, with [brackets] where you should add a number or fact. Spoken answers also get notes on filler words and pacing. Word counts, length, "I"/"we" counts, words per minute and filler words are measured by the app itself, not guessed by the AI.
+- **Resume deep dive:** upload your resume (PDF or DOCX, or paste the text) and it's split into experience, projects, skills and education. Pick the bullets to practice, and an AI interviewer asks about each one ("Why did you choose X over Y?", "What was the hardest part?", "How did you measure that?", "Explain this as if I'm a senior engineer"), then follows up up to twice based on your answers, by typing or speaking. Afterwards you get a debrief: which bullets you explained well and which you struggled with, suggested rewordings for your resume, and a one-click session to practice the weak ones again. The file itself is never stored; only the parsed sections are saved in your browser.
 - **Story library:** every attempt is saved with its feedback. See your score history per question, your average over the last 10 answers, your strongest and weakest themes, and star your best answers as stories to reuse.
 - **Full vs. light days:** finishing all 3 problems, the debugging challenge and both questions is a full day (10 XP). Meeting the light-day minimum (1 problem + 1 behavioral question by default, adjustable in Settings) still keeps the streak and earns 4 XP.
 
@@ -257,7 +258,7 @@ habit-tracker/
 ├── index.html            # page markup
 ├── css/app.css           # all styles
 ├── js/                   # app modules (store, cat, ui, app) and js/prep/ for Interview Prep
-├── api/                  # serverless functions; api/_lib/ai-service.js is the only AI provider code
+├── api/                  # serverless functions: ai.js (all AI features), parse-resume.js; api/_lib/ai-service.js is the only AI provider code
 ├── prompts/              # one system prompt per AI feature
 ├── data/neetcode250.json # the NeetCode 250 list, verified against LeetCode
 ├── data/behavioral.json  # 104 behavioral questions in 13 themes

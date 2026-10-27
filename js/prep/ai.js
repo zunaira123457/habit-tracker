@@ -3,13 +3,14 @@
 // The API key never reaches the browser; only the app passcode is sent.
 import { ui } from '../store.js';
 
-export async function askAI(feature, input) {
+/** POST JSON to one of our API endpoints, with the app passcode. */
+export async function postApi(path, body) {
   let res;
   try {
-    res = await fetch('/api/ai', {
+    res = await fetch(path, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-app-passcode': ui.aiPasscode || '' },
-      body: JSON.stringify({ feature, input }),
+      body: JSON.stringify(body),
     });
   } catch {
     throw new Error("Couldn't reach the AI server. Check your connection.");
@@ -22,3 +23,5 @@ export async function askAI(feature, input) {
   }
   return data;
 }
+
+export const askAI = (feature, input) => postApi('/api/ai', { feature, input });

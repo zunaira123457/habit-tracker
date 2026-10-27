@@ -14,6 +14,7 @@ import { loadBank, bankReady, ensureBehavioral } from './behavioral.js';
 import { initBehavioral, renderBehavioralToday, renderLibrary } from './behavioral-view.js';
 import { challengesReady, ensureDebugging } from './debugging.js';
 import { initDebugging, renderDebugToday, renderDebugTab } from './debugging-view.js';
+import { initResume, renderResume } from './resume-view.js';
 import { renderMarkdown } from './markdown.js';
 
 const today = () => state.currentDay;
@@ -134,7 +135,9 @@ function showTab(t) {
   $('#prep-today-pane').hidden = t !== 'today';
   $('#prep-debug-pane').hidden = t !== 'debugging';
   $('#prep-library-pane').hidden = t !== 'library';
+  $('#prep-resume-pane').hidden = t !== 'resume';
   if (t === 'library') renderLibrary();
+  if (t === 'resume') renderResume();
   if (t === 'debugging') renderDebugTab();
 }
 export function renderPrep() { renderProblems(); renderProgress(); renderDebugToday(); renderBehavioralToday(); if (tab === 'library') renderLibrary(); }
@@ -255,6 +258,7 @@ export function initPrep() {
     renderDebugToday(); renderChecklist(); changed(); toast('Debugging language saved', 'success');
   });
   initBehavioral();
+  initResume();
   initDebugging()
     .then(() => { renderDebugToday(); renderChecklist(); changed(); })
     .catch(err => { const l = $('#dbg-today'); if (l) l.innerHTML = `<div class="empty"><b>Couldn't load challenges</b><span>${esc(err.message)}</span></div>`; });
