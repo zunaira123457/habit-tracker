@@ -1,6 +1,5 @@
 // Resume text extraction (same approach as Interview Room) and AI structuring into sections.
 import mammoth from 'mammoth';
-import { PDFParse } from 'pdf-parse';
 import { AIError, generate } from './ai-service.js';
 
 export const MAX_BYTES = 3 * 1024 * 1024; // JSON body limit on Vercel is 4.5 MB; base64 adds a third
@@ -19,8 +18,9 @@ export function cleanText(text) {
 export async function extractText(fileName, buffer) {
   const name = String(fileName || '').toLowerCase();
   if (name.endsWith('.pdf')) {
-    const parser = new PDFParse({ data: new Uint8Array(buffer) });
-    try { return cleanText((await parser.getText()).text); } finally { await parser.destroy(); }
+    // Loaded only for PDFs, so DOCX and pasted text never depend on the PDF stack.
+    const { pdfToText } = await import('./pdf.js');
+    return cleanText(await pdfToText(buffer));
   }
   if (name.endsWith('.docx')) return cleanText((await mammoth.extractRawText({ buffer })).value);
   if (name.endsWith('.txt') || name.endsWith('.md')) return cleanText(buffer.toString('utf8'));
