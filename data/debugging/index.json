@@ -1,0 +1,885 @@
+{
+  "challenges": [
+    {
+      "id": "py-inventory-restock",
+      "title": "Restock report",
+      "language": "python",
+      "difficulty": "easy",
+      "order": 1,
+      "summary": "A warehouse restock report skips some items that need ordering.",
+      "bugCount": 1,
+      "bugTypes": [
+        "wrong-conditional"
+      ],
+      "crossFile": false,
+      "files": [
+        "models/item.py",
+        "services/inventory.py",
+        "tests/test_inventory.py",
+        "utils/format.py"
+      ],
+      "visibleTests": [
+        "tests/test_inventory.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_inventory.py"
+      ],
+      "solutionFiles": [
+        "services/inventory.py"
+      ]
+    },
+    {
+      "id": "js-todo-filter",
+      "title": "Everything is done?",
+      "language": "javascript",
+      "difficulty": "easy",
+      "order": 2,
+      "summary": "Opening the 'completed' tab marks every to-do as done.",
+      "bugCount": 1,
+      "bugTypes": [
+        "wrong-conditional"
+      ],
+      "crossFile": false,
+      "files": [
+        "models/todo.js",
+        "services/todos.js",
+        "tests/todos.test.js",
+        "utils/format.js"
+      ],
+      "visibleTests": [
+        "tests/todos.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "services/todos.js"
+      ]
+    },
+    {
+      "id": "py-grade-book",
+      "title": "Grade book averages",
+      "language": "python",
+      "difficulty": "easy",
+      "order": 3,
+      "summary": "Students' averages and letter grades come out too low.",
+      "bugCount": 1,
+      "bugTypes": [
+        "off-by-one"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/student.py",
+        "services/report.py",
+        "tests/test_report.py",
+        "utils/stats.py"
+      ],
+      "visibleTests": [
+        "tests/test_report.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_report.py"
+      ],
+      "solutionFiles": [
+        "utils/stats.py"
+      ]
+    },
+    {
+      "id": "js-pagination",
+      "title": "Missing first page",
+      "language": "javascript",
+      "difficulty": "easy",
+      "order": 4,
+      "summary": "The product list skips the first page of results.",
+      "bugCount": 1,
+      "bugTypes": [
+        "off-by-one"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/product.js",
+        "services/products.js",
+        "tests/products.test.js",
+        "utils/paginate.js"
+      ],
+      "visibleTests": [
+        "tests/products.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "utils/paginate.js"
+      ]
+    },
+    {
+      "id": "py-shopping-cart",
+      "title": "Carts that share items",
+      "language": "python",
+      "difficulty": "easy",
+      "order": 5,
+      "summary": "Items added to one customer's cart appear in other customers' carts.",
+      "bugCount": 1,
+      "bugTypes": [
+        "mutation-aliasing"
+      ],
+      "crossFile": false,
+      "files": [
+        "models/cart.py",
+        "models/product.py",
+        "services/checkout.py",
+        "tests/test_checkout.py"
+      ],
+      "visibleTests": [
+        "tests/test_checkout.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_checkout.py"
+      ],
+      "solutionFiles": [
+        "models/cart.py"
+      ]
+    },
+    {
+      "id": "js-weather-summary",
+      "title": "No readings today",
+      "language": "javascript",
+      "difficulty": "easy",
+      "order": 6,
+      "summary": "The weather dashboard shows -Infinity and NaN when a station has no valid readings.",
+      "bugCount": 1,
+      "bugTypes": [
+        "edge-case"
+      ],
+      "crossFile": false,
+      "files": [
+        "models/reading.js",
+        "services/weather.js",
+        "tests/weather.test.js",
+        "utils/format.js",
+        "utils/stats.js"
+      ],
+      "visibleTests": [
+        "tests/weather.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "services/weather.js"
+      ]
+    },
+    {
+      "id": "py-url-shortener",
+      "title": "The first short link",
+      "language": "python",
+      "difficulty": "easy",
+      "order": 7,
+      "summary": "The very first shortened URL gets an empty code and can't be opened.",
+      "bugCount": 1,
+      "bugTypes": [
+        "edge-case"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/link.py",
+        "services/shortener.py",
+        "tests/test_shortener.py",
+        "utils/base62.py"
+      ],
+      "visibleTests": [
+        "tests/test_shortener.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_base62.py"
+      ],
+      "solutionFiles": [
+        "utils/base62.py"
+      ]
+    },
+    {
+      "id": "js-directory-sort",
+      "title": "Staff directory order",
+      "language": "javascript",
+      "difficulty": "easy",
+      "order": 8,
+      "summary": "The staff directory isn't in alphabetical order.",
+      "bugCount": 1,
+      "bugTypes": [
+        "wrong-conditional"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/person.js",
+        "services/directory.js",
+        "tests/directory.test.js",
+        "utils/compare.js"
+      ],
+      "visibleTests": [
+        "tests/directory.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "utils/compare.js"
+      ]
+    },
+    {
+      "id": "py-library-loans",
+      "title": "Library late fees",
+      "language": "python",
+      "difficulty": "medium",
+      "order": 9,
+      "summary": "Members are charged late fees on the due date, and late books cost one day too much.",
+      "bugCount": 2,
+      "bugTypes": [
+        "off-by-one",
+        "wrong-conditional"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/loan.py",
+        "services/loans.py",
+        "tests/test_loans.py",
+        "utils/dates.py"
+      ],
+      "visibleTests": [
+        "tests/test_loans.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_loans.py"
+      ],
+      "solutionFiles": [
+        "utils/dates.py",
+        "services/loans.py"
+      ]
+    },
+    {
+      "id": "js-shared-cart",
+      "title": "Shared shopping carts",
+      "language": "javascript",
+      "difficulty": "medium",
+      "order": 10,
+      "summary": "Changing the quantity in one cart changes it in another, and prices show as $1.5.",
+      "bugCount": 2,
+      "bugTypes": [
+        "mutation-aliasing",
+        "edge-case"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/catalog.js",
+        "services/cart.js",
+        "tests/cart.test.js",
+        "utils/money.js"
+      ],
+      "visibleTests": [
+        "tests/cart.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "services/cart.js",
+        "utils/money.js"
+      ]
+    },
+    {
+      "id": "py-leaderboard",
+      "title": "Leaderboard top players",
+      "language": "python",
+      "difficulty": "medium",
+      "order": 11,
+      "summary": "The leaderboard shows the worst players first and crashes for small games.",
+      "bugCount": 2,
+      "bugTypes": [
+        "wrong-data-structure",
+        "edge-case"
+      ],
+      "crossFile": false,
+      "files": [
+        "models/player.py",
+        "services/leaderboard.py",
+        "tests/test_leaderboard.py",
+        "utils/ranking.py"
+      ],
+      "visibleTests": [
+        "tests/test_leaderboard.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_leaderboard.py"
+      ],
+      "solutionFiles": [
+        "services/leaderboard.py"
+      ]
+    },
+    {
+      "id": "js-room-booking",
+      "title": "Room booking dates",
+      "language": "javascript",
+      "difficulty": "medium",
+      "order": 12,
+      "summary": "Back-to-back bookings are rejected and stays across a month end cost the wrong amount.",
+      "bugCount": 2,
+      "bugTypes": [
+        "off-by-one",
+        "wrong-conditional"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/booking.js",
+        "services/booking.js",
+        "tests/booking.test.js",
+        "utils/dates.js"
+      ],
+      "visibleTests": [
+        "tests/booking.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "utils/dates.js",
+        "services/booking.js"
+      ]
+    },
+    {
+      "id": "py-event-batches",
+      "title": "Event batches",
+      "language": "python",
+      "difficulty": "medium",
+      "order": 13,
+      "summary": "Batches of event ids come out scrambled and the last batch goes missing.",
+      "bugCount": 2,
+      "bugTypes": [
+        "wrong-data-structure",
+        "off-by-one"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/event.py",
+        "services/batch.py",
+        "services/dedupe.py",
+        "tests/test_batches.py",
+        "utils/chunks.py"
+      ],
+      "visibleTests": [
+        "tests/test_batches.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_batches.py"
+      ],
+      "solutionFiles": [
+        "services/dedupe.py",
+        "utils/chunks.py"
+      ]
+    },
+    {
+      "id": "js-word-frequency",
+      "title": "Word frequency",
+      "language": "javascript",
+      "difficulty": "medium",
+      "order": 14,
+      "summary": "A word counter returns garbage for some words and counts 'The' and 'the' separately.",
+      "bugCount": 2,
+      "bugTypes": [
+        "wrong-data-structure",
+        "edge-case"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/document.js",
+        "services/frequency.js",
+        "tests/frequency.test.js",
+        "utils/text.js"
+      ],
+      "visibleTests": [
+        "tests/frequency.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "services/frequency.js",
+        "utils/text.js"
+      ]
+    },
+    {
+      "id": "py-monthly-fees",
+      "title": "The growing monthly fee",
+      "language": "python",
+      "difficulty": "medium",
+      "order": 15,
+      "summary": "A bank's monthly fee gets bigger every time it's charged.",
+      "bugCount": 1,
+      "bugTypes": [
+        "mutation-aliasing"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/account.py",
+        "models/money.py",
+        "services/fees.py",
+        "services/ledger.py",
+        "tests/test_fees.py"
+      ],
+      "visibleTests": [
+        "tests/test_fees.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_money.py"
+      ],
+      "solutionFiles": [
+        "models/money.py"
+      ]
+    },
+    {
+      "id": "js-retry-client",
+      "title": "Retries that don't retry",
+      "language": "javascript",
+      "difficulty": "medium",
+      "order": 16,
+      "summary": "An API client is supposed to retry failed requests but gives up immediately.",
+      "bugCount": 2,
+      "bugTypes": [
+        "async-race",
+        "off-by-one"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/user.js",
+        "services/client.js",
+        "tests/client.test.js",
+        "utils/retry.js",
+        "utils/sleep.js"
+      ],
+      "visibleTests": [
+        "tests/client.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "utils/retry.js"
+      ]
+    },
+    {
+      "id": "py-config-loader",
+      "title": "Sticky config",
+      "language": "python",
+      "difficulty": "medium",
+      "order": 17,
+      "summary": "Settings from one environment leak into the next, and DEBUG=false turns debug on.",
+      "bugCount": 2,
+      "bugTypes": [
+        "mutation-aliasing",
+        "wrong-conditional"
+      ],
+      "crossFile": false,
+      "files": [
+        "models/settings.py",
+        "services/config.py",
+        "tests/test_config.py",
+        "utils/merge.py",
+        "utils/parse.py"
+      ],
+      "visibleTests": [
+        "tests/test_config.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_config.py"
+      ],
+      "solutionFiles": [
+        "utils/merge.py",
+        "utils/parse.py"
+      ]
+    },
+    {
+      "id": "js-stock-events",
+      "title": "Skipped listeners",
+      "language": "javascript",
+      "difficulty": "medium",
+      "order": 18,
+      "summary": "Low-stock alerts sometimes don't reach the warehouse team.",
+      "bugCount": 1,
+      "bugTypes": [
+        "mutation-aliasing"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/stock-item.js",
+        "services/inventory.js",
+        "tests/inventory.test.js",
+        "utils/emitter.js"
+      ],
+      "visibleTests": [
+        "tests/inventory.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "utils/emitter.js"
+      ]
+    },
+    {
+      "id": "py-rate-limiter",
+      "title": "Rate limiter",
+      "language": "python",
+      "difficulty": "medium",
+      "order": 19,
+      "summary": "Clients get blocked long after they should be allowed again.",
+      "bugCount": 2,
+      "bugTypes": [
+        "wrong-data-structure",
+        "off-by-one"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/client.py",
+        "services/limiter.py",
+        "tests/test_limiter.py",
+        "utils/window.py"
+      ],
+      "visibleTests": [
+        "tests/test_limiter.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_limiter.py"
+      ],
+      "solutionFiles": [
+        "utils/window.py"
+      ]
+    },
+    {
+      "id": "js-invoice-split",
+      "title": "Lost cents",
+      "language": "javascript",
+      "difficulty": "medium",
+      "order": 20,
+      "summary": "Invoice totals are a cent short and split bills don't add up to the total.",
+      "bugCount": 2,
+      "bugTypes": [
+        "edge-case"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/line-item.js",
+        "services/invoice.js",
+        "tests/invoice.test.js",
+        "utils/currency.js"
+      ],
+      "visibleTests": [
+        "tests/invoice.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "utils/currency.js",
+        "services/invoice.js"
+      ]
+    },
+    {
+      "id": "py-async-cache",
+      "title": "Async profile cache",
+      "language": "python",
+      "difficulty": "hard",
+      "order": 21,
+      "summary": "A cache in front of a slow profile API hits the API far more than it should.",
+      "bugCount": 2,
+      "bugTypes": [
+        "async-race",
+        "wrong-conditional"
+      ],
+      "crossFile": false,
+      "files": [
+        "models/profile.py",
+        "services/cache.py",
+        "services/profiles.py",
+        "tests/test_cache.py",
+        "utils/clock.py"
+      ],
+      "visibleTests": [
+        "tests/test_cache.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_cache.py"
+      ],
+      "solutionFiles": [
+        "services/cache.py"
+      ]
+    },
+    {
+      "id": "js-download-queue",
+      "title": "Download queue",
+      "language": "javascript",
+      "difficulty": "hard",
+      "order": 22,
+      "summary": "A concurrency-limited download queue runs everything at once and returns results out of order.",
+      "bugCount": 2,
+      "bugTypes": [
+        "async-race"
+      ],
+      "crossFile": false,
+      "files": [
+        "models/download.js",
+        "services/downloader.js",
+        "services/queue.js",
+        "tests/downloader.test.js",
+        "utils/map-limit.js"
+      ],
+      "visibleTests": [
+        "tests/downloader.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "services/queue.js",
+        "utils/map-limit.js"
+      ]
+    },
+    {
+      "id": "py-order-pricing",
+      "title": "Coupons and cents",
+      "language": "python",
+      "difficulty": "hard",
+      "order": 23,
+      "summary": "Coupon orders get cheaper every time they're priced, and tax is off by a cent.",
+      "bugCount": 2,
+      "bugTypes": [
+        "mutation-aliasing",
+        "edge-case"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/order.py",
+        "services/checkout.py",
+        "services/pricing.py",
+        "tests/test_checkout.py",
+        "utils/money.py"
+      ],
+      "visibleTests": [
+        "tests/test_checkout.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_pricing.py"
+      ],
+      "solutionFiles": [
+        "services/pricing.py",
+        "utils/money.py"
+      ]
+    },
+    {
+      "id": "js-lru-cache",
+      "title": "Thumbnail LRU cache",
+      "language": "javascript",
+      "difficulty": "hard",
+      "order": 24,
+      "summary": "A thumbnail cache throws away the images people are actually looking at.",
+      "bugCount": 2,
+      "bugTypes": [
+        "edge-case",
+        "wrong-data-structure"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/image.js",
+        "services/thumbnails.js",
+        "tests/thumbnails.test.js",
+        "utils/lru.js"
+      ],
+      "visibleTests": [
+        "tests/thumbnails.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "utils/lru.js"
+      ]
+    },
+    {
+      "id": "py-task-scheduler",
+      "title": "Build task scheduler",
+      "language": "python",
+      "difficulty": "hard",
+      "order": 25,
+      "summary": "The build planner drops tasks when a dependency is listed twice and loops silently on cycles.",
+      "bugCount": 2,
+      "bugTypes": [
+        "edge-case"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/task.py",
+        "services/planner.py",
+        "services/scheduler.py",
+        "tests/test_planner.py",
+        "utils/graph.py"
+      ],
+      "visibleTests": [
+        "tests/test_planner.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_scheduler.py"
+      ],
+      "solutionFiles": [
+        "utils/graph.py",
+        "services/scheduler.py"
+      ]
+    },
+    {
+      "id": "js-search-box",
+      "title": "Stale search results",
+      "language": "javascript",
+      "difficulty": "hard",
+      "order": 26,
+      "summary": "Search-as-you-type sometimes shows results for an older query and hammers the API.",
+      "bugCount": 2,
+      "bugTypes": [
+        "async-race"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/search-api.js",
+        "services/search.js",
+        "tests/search.test.js",
+        "utils/debounce.js"
+      ],
+      "visibleTests": [
+        "tests/search.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "services/search.js",
+        "utils/debounce.js"
+      ]
+    },
+    {
+      "id": "py-worker-pool",
+      "title": "Async worker pool",
+      "language": "python",
+      "difficulty": "hard",
+      "order": 27,
+      "summary": "Image jobs come back in the wrong order and the job counter undercounts.",
+      "bugCount": 2,
+      "bugTypes": [
+        "async-race"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/job.py",
+        "services/pool.py",
+        "services/resize.py",
+        "tests/test_resize.py",
+        "utils/stats.py"
+      ],
+      "visibleTests": [
+        "tests/test_resize.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_pool.py"
+      ],
+      "solutionFiles": [
+        "services/pool.py",
+        "utils/stats.py"
+      ]
+    },
+    {
+      "id": "js-transit-routes",
+      "title": "Fewest stops",
+      "language": "javascript",
+      "difficulty": "hard",
+      "order": 28,
+      "summary": "The transit planner suggests routes with extra stops, and crashes near the end of a line.",
+      "bugCount": 2,
+      "bugTypes": [
+        "wrong-data-structure",
+        "edge-case"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/network.js",
+        "services/routes.js",
+        "tests/routes.test.js",
+        "utils/format.js"
+      ],
+      "visibleTests": [
+        "tests/routes.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "services/routes.js",
+        "models/network.js"
+      ]
+    },
+    {
+      "id": "py-log-report",
+      "title": "Log report",
+      "language": "python",
+      "difficulty": "hard",
+      "order": 29,
+      "summary": "The log report crashes on some messages and shows the wrong 'first error'.",
+      "bugCount": 2,
+      "bugTypes": [
+        "edge-case",
+        "mutation-aliasing"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/log_file.py",
+        "services/aggregate.py",
+        "services/report.py",
+        "tests/test_report.py",
+        "utils/parse.py"
+      ],
+      "visibleTests": [
+        "tests/test_report.py"
+      ],
+      "hiddenTests": [
+        "tests/test_hidden_report.py"
+      ],
+      "solutionFiles": [
+        "utils/parse.py",
+        "services/report.py"
+      ]
+    },
+    {
+      "id": "js-bank-transfers",
+      "title": "Concurrent transfers",
+      "language": "javascript",
+      "difficulty": "hard",
+      "order": 30,
+      "summary": "Money disappears when transfers happen at the same time, and zero-cent transfers get through.",
+      "bugCount": 2,
+      "bugTypes": [
+        "async-race",
+        "edge-case"
+      ],
+      "crossFile": true,
+      "files": [
+        "models/audit-log.js",
+        "services/bank.js",
+        "tests/bank.test.js",
+        "utils/validate.js"
+      ],
+      "visibleTests": [
+        "tests/bank.test.js"
+      ],
+      "hiddenTests": [
+        "tests/hidden.test.js"
+      ],
+      "solutionFiles": [
+        "services/bank.js",
+        "utils/validate.js"
+      ]
+    }
+  ]
+}

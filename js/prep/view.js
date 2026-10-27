@@ -12,6 +12,8 @@ import {
 import { askAI } from './ai.js';
 import { loadBank, bankReady, ensureBehavioral } from './behavioral.js';
 import { initBehavioral, renderBehavioralToday, renderLibrary } from './behavioral-view.js';
+import { challengesReady, ensureDebugging } from './debugging.js';
+import { initDebugging, renderDebugToday, renderDebugTab } from './debugging-view.js';
 import { renderMarkdown } from './markdown.js';
 
 const today = () => state.currentDay;
@@ -130,20 +132,23 @@ function showTab(t) {
   tab = t;
   $$('#prep-tabs [data-ptab]').forEach(b => b.setAttribute('aria-pressed', b.dataset.ptab === t));
   $('#prep-today-pane').hidden = t !== 'today';
+  $('#prep-debug-pane').hidden = t !== 'debugging';
   $('#prep-library-pane').hidden = t !== 'library';
   if (t === 'library') renderLibrary();
+  if (t === 'debugging') renderDebugTab();
 }
-export function renderPrep() { renderProblems(); renderProgress(); renderBehavioralToday(); if (tab === 'library') renderLibrary(); }
+export function renderPrep() { renderProblems(); renderProgress(); renderDebugToday(); renderBehavioralToday(); if (tab === 'library') renderLibrary(); }
 
 /* ================= Today checklist ================= */
 export function renderChecklist() {
   const box = $('#prep-check'); if (!box) return;
   if (catalogReady()) ensureDay(today());
   if (bankReady()) ensureBehavioral(today());
+  if (challengesReady()) ensureDebugging(today());
   const level = prepLevel(today());
   const prog = dayProgress(today());
   const min = prep.settings.lightDay;
-  const lightText = [min.leetcode ? `${min.leetcode} problem${min.leetcode > 1 ? 's' : ''}` : '', min.behavioral ? `${min.behavioral} behavioral` : ''].filter(Boolean).join(' + ');
+  const lightText = [min.leetcode ? `${min.leetcode} problem${min.leetcode > 1 ? 's' : ''}` : '', min.debugging ? 'the debugging challenge' : '', min.behavioral ? `${min.behavioral} behavioral` : ''].filter(Boolean).join(' + ');
   const row = (emoji, name, p, target) => {
     const total = p.total || target, pct = p.total ? p.done / p.total : 0;
     return `<li class="row check-row ${p.total && p.done === p.total ? 'done' : ''}">
@@ -163,6 +168,7 @@ export function renderChecklist() {
     </header>
     <ul class="rows">
       ${row('🧩', 'NeetCode problems', prog.leetcode, SECTION_TARGET.leetcode)}
+      ${row('🐞', 'Debugging challenge', prog.debugging, SECTION_TARGET.debugging)}
       ${row('🎤', 'Behavioral questions', prog.behavioral, SECTION_TARGET.behavioral)}
     </ul>`;
 }
@@ -181,7 +187,14 @@ export function renderPrepSettings() {
       <div><h3 id="light-h">Light day minimum</h3><p>What still keeps your streak on a busy day. A light day gives 4 XP instead of 10.</p></div>
       <div class="light-fields" role="group" aria-labelledby="light-h">
         <div class="inline-field"><input class="input" id="light-lc" type="number" min="0" max="3" step="1" value="${prep.settings.lightDay.leetcode}" aria-label="NeetCode problems"><span>NeetCode problems</span></div>
+        <div class="inline-field"><input class="input" id="light-dbg" type="number" min="0" max="1" step="1" value="${prep.settings.lightDay.debugging || 0}" aria-label="Debugging challenges"><span>debugging challenge</span></div>
         <div class="inline-field"><input class="input" id="light-bq" type="number" min="0" max="2" step="1" value="${prep.settings.lightDay.behavioral}" aria-label="Behavioral questions"><span>behavioral questions</span></div>
+      </div>
+    </div>
+    <div class="set-row">
+      <div><h3 id="dbg-lang-h">Debugging language</h3><p>Which languages your daily debugging challenges use.</p></div>
+      <div class="seg" role="group" aria-labelledby="dbg-lang-h">
+        ${[['both', 'Both'], ['python', 'Python'], ['javascript', 'JavaScript']].map(([v, l]) => `<button type="button" data-dbg-lang="${v}" aria-pressed="${(prep.settings.debugLanguage || 'both') === v}">${l}</button>`).join('')}
       </div>
     </div>
     <div class="set-row">
@@ -234,7 +247,17 @@ function onClick(e) {
 export function initPrep() {
   $('#view-prep').addEventListener('click', onClick);
   document.addEventListener('click', e => { const b = e.target.closest('[data-ptab]'); if (b) { if (!$('#view-prep').classList.contains('active')) location.hash = '#prep'; showTab(b.dataset.ptab); } });
+  document.addEventListener('prep:tab', e => showTab(e.detail));
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-dbg-lang]'); if (!b) return;
+    prep.settings.debugLanguage = b.dataset.dbgLang; savePrep();
+    $$('[data-dbg-lang]').forEach(x => x.setAttribute('aria-pressed', x === b));
+    renderDebugToday(); renderChecklist(); changed(); toast('Debugging language saved', 'success');
+  });
   initBehavioral();
+  initDebugging()
+    .then(() => { renderDebugToday(); renderChecklist(); changed(); })
+    .catch(err => { const l = $('#dbg-today'); if (l) l.innerHTML = `<div class="empty"><b>Couldn't load challenges</b><span>${esc(err.message)}</span></div>`; });
   $('#view-prep').addEventListener('input', e => {
     if (e.target.dataset.pactInput !== 'notes') return;
     const slot = prep.days[today()]?.leetcode.find(s => s.slug === e.target.closest('.prob').dataset.slug);
@@ -242,12 +265,13 @@ export function initPrep() {
   });
   document.addEventListener('change', e => {
     if (e.target.id === 'prep-enabled') { prep.enabled = e.target.checked; savePrep(); renderChecklist(); changed(); toast(prep.enabled ? 'Interview Prep now counts toward your streak' : 'Interview Prep no longer affects your streak', 'success'); }
-    if (e.target.id === 'light-lc' || e.target.id === 'light-bq') {
-      const field = e.target.id === 'light-lc' ? 'leetcode' : 'behavioral';
+    const LIGHT = { 'light-lc': 'leetcode', 'light-dbg': 'debugging', 'light-bq': 'behavioral' };
+    if (LIGHT[e.target.id]) {
+      const field = LIGHT[e.target.id];
       const max = SECTION_TARGET[field];
       const n = Math.min(max, Math.max(0, Math.round(Number(e.target.value) || 0)));
-      const other = field === 'leetcode' ? 'behavioral' : 'leetcode';
-      if (n === 0 && !prep.settings.lightDay[other]) { e.target.value = prep.settings.lightDay[field]; toast('A light day needs at least one item.'); return; }
+      const othersTotal = Object.entries(prep.settings.lightDay).reduce((sum, [k, v]) => sum + (k === field ? 0 : v || 0), 0);
+      if (n === 0 && !othersTotal) { e.target.value = prep.settings.lightDay[field]; toast('A light day needs at least one item.'); return; }
       e.target.value = n; prep.settings.lightDay[field] = n; savePrep(); renderChecklist(); changed(); toast('Light day minimum saved', 'success');
     }
     if (e.target.id === 'ai-passcode') { ui.aiPasscode = e.target.value.trim(); saveUI(); toast('AI passcode saved on this device', 'success'); }

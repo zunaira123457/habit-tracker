@@ -1,0 +1,22 @@
+{
+  "title": "Retries that don't retry",
+  "language": "javascript",
+  "difficulty": "medium",
+  "order": 16,
+  "summary": "An API client is supposed to retry failed requests but gives up immediately.",
+  "bugs": [
+    {
+      "type": "async-race",
+      "file": "utils/retry.js",
+      "find": "      return fn(attempt);",
+      "replace": "      return await fn(attempt);",
+      "crossFile": true
+    },
+    {
+      "type": "off-by-one",
+      "file": "utils/retry.js",
+      "find": "for (let attempt = 0; attempt < retries; attempt++)",
+      "replace": "for (let attempt = 0; attempt <= retries; attempt++)"
+    }
+  ]
+}

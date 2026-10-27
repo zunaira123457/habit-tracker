@@ -1,0 +1,22 @@
+{
+  "title": "Stale search results",
+  "language": "javascript",
+  "difficulty": "hard",
+  "order": 26,
+  "summary": "Search-as-you-type sometimes shows results for an older query and hammers the API.",
+  "bugs": [
+    {
+      "type": "async-race",
+      "file": "services/search.js",
+      "find": "    this.query = '';\n  }\n\n  async run(query) {\n    this.query = query;\n    const results = await this.api.search(query);\n    this.results = results;\n  }\n",
+      "replace": "    this.query = '';\n    this.latest = 0;\n  }\n\n  async run(query) {\n    this.query = query;\n    const id = ++this.latest;\n    const results = await this.api.search(query);\n    if (id === this.latest) this.results = results;\n  }\n"
+    },
+    {
+      "type": "async-race",
+      "file": "utils/debounce.js",
+      "find": "function debounce(fn, ms) {\n  return (...args) => {\n    let timer;\n    clearTimeout(timer);\n",
+      "replace": "function debounce(fn, ms) {\n  let timer;\n  return (...args) => {\n    clearTimeout(timer);\n",
+      "crossFile": true
+    }
+  ]
+}

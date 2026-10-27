@@ -1,0 +1,22 @@
+{
+  "title": "Word frequency",
+  "language": "javascript",
+  "difficulty": "medium",
+  "order": 14,
+  "summary": "A word counter returns garbage for some words and counts 'The' and 'the' separately.",
+  "bugs": [
+    {
+      "type": "wrong-data-structure",
+      "file": "services/frequency.js",
+      "find": "  const counts = {};\n  for (const w of tokenize(text)) counts[w] = (counts[w] || 0) + 1;\n  return counts;\n",
+      "replace": "  const counts = new Map();\n  for (const w of tokenize(text)) counts.set(w, (counts.get(w) || 0) + 1);\n  return counts;\n"
+    },
+    {
+      "type": "edge-case",
+      "file": "utils/text.js",
+      "find": "  return text.split(' ').filter(Boolean);",
+      "replace": "  return text.toLowerCase().match(/[a-z']+/g) || [];",
+      "crossFile": true
+    }
+  ]
+}

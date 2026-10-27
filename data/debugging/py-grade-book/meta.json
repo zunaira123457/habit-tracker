@@ -1,0 +1,16 @@
+{
+  "title": "Grade book averages",
+  "language": "python",
+  "difficulty": "easy",
+  "order": 3,
+  "summary": "Students' averages and letter grades come out too low.",
+  "bugs": [
+    {
+      "type": "off-by-one",
+      "file": "utils/stats.py",
+      "find": "for i in range(len(values) - 1):",
+      "replace": "for i in range(len(values)):",
+      "crossFile": true
+    }
+  ]
+}

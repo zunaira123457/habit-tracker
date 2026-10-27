@@ -1,0 +1,15 @@
+{
+  "title": "Everything is done?",
+  "language": "javascript",
+  "difficulty": "easy",
+  "order": 2,
+  "summary": "Opening the 'completed' tab marks every to-do as done.",
+  "bugs": [
+    {
+      "type": "wrong-conditional",
+      "file": "services/todos.js",
+      "find": "todos.filter(t => t.done = true)",
+      "replace": "todos.filter(t => t.done === true)"
+    }
+  ]
+}

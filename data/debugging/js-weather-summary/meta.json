@@ -1,0 +1,15 @@
+{
+  "title": "No readings today",
+  "language": "javascript",
+  "difficulty": "easy",
+  "order": 6,
+  "summary": "The weather dashboard shows -Infinity and NaN when a station has no valid readings.",
+  "bugs": [
+    {
+      "type": "edge-case",
+      "file": "services/weather.js",
+      "find": "  return { high: max(temps),",
+      "replace": "  if (temps.length === 0) return { high: null, average: null, count: 0 };\n  return { high: max(temps),"
+    }
+  ]
+}

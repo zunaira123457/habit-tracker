@@ -1,0 +1,21 @@
+{
+  "title": "Leaderboard top players",
+  "language": "python",
+  "difficulty": "medium",
+  "order": 11,
+  "summary": "The leaderboard shows the worst players first and crashes for small games.",
+  "bugs": [
+    {
+      "type": "wrong-data-structure",
+      "file": "services/leaderboard.py",
+      "find": "heapq.heappush(heap, (p.score, p.name))",
+      "replace": "heapq.heappush(heap, (-p.score, p.name))"
+    },
+    {
+      "type": "edge-case",
+      "file": "services/leaderboard.py",
+      "find": "for _ in range(k)]",
+      "replace": "for _ in range(min(k, len(heap)))]"
+    }
+  ]
+}

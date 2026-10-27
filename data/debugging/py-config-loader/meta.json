@@ -1,0 +1,21 @@
+{
+  "title": "Sticky config",
+  "language": "python",
+  "difficulty": "medium",
+  "order": 17,
+  "summary": "Settings from one environment leak into the next, and DEBUG=false turns debug on.",
+  "bugs": [
+    {
+      "type": "mutation-aliasing",
+      "file": "utils/merge.py",
+      "find": "    result = base\n",
+      "replace": "    result = dict(base)\n"
+    },
+    {
+      "type": "wrong-conditional",
+      "file": "utils/parse.py",
+      "find": "    return bool(text.strip())\n",
+      "replace": "    return text.strip().lower() in (\"1\", \"true\", \"yes\", \"on\")\n"
+    }
+  ]
+}

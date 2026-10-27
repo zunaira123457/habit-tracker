@@ -1,0 +1,23 @@
+{
+  "title": "Thumbnail LRU cache",
+  "language": "javascript",
+  "difficulty": "hard",
+  "order": 24,
+  "summary": "A thumbnail cache throws away the images people are actually looking at.",
+  "bugs": [
+    {
+      "type": "edge-case",
+      "file": "utils/lru.js",
+      "find": "    if (!this.map.has(key)) return undefined;\n    return this.map.get(key);\n",
+      "replace": "    if (!this.map.has(key)) return undefined;\n    const value = this.map.get(key);\n    this.map.delete(key);\n    this.map.set(key, value);\n    return value;\n",
+      "crossFile": true
+    },
+    {
+      "type": "wrong-data-structure",
+      "file": "utils/lru.js",
+      "find": "      const evict = [...this.map.keys()].pop();",
+      "replace": "      const evict = this.map.keys().next().value;",
+      "crossFile": true
+    }
+  ]
+}

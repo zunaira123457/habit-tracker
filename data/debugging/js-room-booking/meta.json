@@ -1,0 +1,22 @@
+{
+  "title": "Room booking dates",
+  "language": "javascript",
+  "difficulty": "medium",
+  "order": 12,
+  "summary": "Back-to-back bookings are rejected and stays across a month end cost the wrong amount.",
+  "bugs": [
+    {
+      "type": "off-by-one",
+      "file": "utils/dates.js",
+      "find": "  return new Date(Date.UTC(y, m, d));",
+      "replace": "  return new Date(Date.UTC(y, m - 1, d));",
+      "crossFile": true
+    },
+    {
+      "type": "wrong-conditional",
+      "file": "services/booking.js",
+      "find": "  return a.checkIn <= b.checkOut && b.checkIn <= a.checkOut;",
+      "replace": "  return a.checkIn < b.checkOut && b.checkIn < a.checkOut;"
+    }
+  ]
+}

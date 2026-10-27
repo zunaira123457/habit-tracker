@@ -1,0 +1,22 @@
+{
+  "title": "Log report",
+  "language": "python",
+  "difficulty": "hard",
+  "order": 29,
+  "summary": "The log report crashes on some messages and shows the wrong 'first error'.",
+  "bugs": [
+    {
+      "type": "edge-case",
+      "file": "utils/parse.py",
+      "find": "    source, message = rest.split(\":\")\n",
+      "replace": "    source, message = rest.split(\":\", 1)\n",
+      "crossFile": true
+    },
+    {
+      "type": "mutation-aliasing",
+      "file": "services/report.py",
+      "find": "    errors = groups.get(\"ERROR\", [])\n    errors.sort(key=lambda e: e[\"timestamp\"], reverse=True)\n",
+      "replace": "    errors = sorted(groups.get(\"ERROR\", []), key=lambda e: e[\"timestamp\"], reverse=True)\n"
+    }
+  ]
+}

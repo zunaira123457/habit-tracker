@@ -1,0 +1,22 @@
+{
+  "title": "Concurrent transfers",
+  "language": "javascript",
+  "difficulty": "hard",
+  "order": 30,
+  "summary": "Money disappears when transfers happen at the same time, and zero-cent transfers get through.",
+  "bugs": [
+    {
+      "type": "async-race",
+      "file": "services/bank.js",
+      "find": "    const fromBalance = this.balance(from);\n    const toBalance = this.balance(to);\n    if (fromBalance < cents) throw new Error('Insufficient funds');\n    await this.audit.log({ from, to, cents });\n    this.balances.set(from, fromBalance - cents);\n    this.balances.set(to, toBalance + cents);\n",
+      "replace": "    if (this.balance(from) < cents) throw new Error('Insufficient funds');\n    this.balances.set(from, this.balance(from) - cents);\n    this.balances.set(to, this.balance(to) + cents);\n    await this.audit.log({ from, to, cents });\n"
+    },
+    {
+      "type": "edge-case",
+      "file": "utils/validate.js",
+      "find": "  if (typeof cents !== 'number' || cents < 0) {",
+      "replace": "  if (!Number.isInteger(cents) || cents <= 0) {",
+      "crossFile": true
+    }
+  ]
+}

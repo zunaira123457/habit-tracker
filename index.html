@@ -98,8 +98,10 @@
       <section id="view-prep" class="view" aria-labelledby="page-title">
         <div class="seg prep-tabs" id="prep-tabs" role="group" aria-label="Interview Prep sections">
           <button type="button" data-ptab="today" aria-pressed="true">Today's plan</button>
+          <button type="button" data-ptab="debugging" aria-pressed="false">Debugging</button>
           <button type="button" data-ptab="library" aria-pressed="false">Story library</button>
         </div>
+        <div id="prep-debug-pane" hidden><div id="dbg-workspace"></div></div>
         <div id="prep-library-pane" class="hist-stack" hidden><div id="bq-library" class="hist-stack"></div></div>
         <div class="prep-grid" id="prep-today-pane">
           <div class="prep-main">
@@ -109,6 +111,13 @@
                 <span class="count" id="lc-count">0/0</span>
               </header>
               <div class="prob-list" id="lc-list"></div>
+            </section>
+            <section class="panel group" aria-labelledby="dbg-h">
+              <header class="group-head">
+                <div><h2 id="dbg-h">Today's debugging challenge</h2><p>Fix the planted bugs. Hidden tests decide pass or fail.</p></div>
+                <span class="count" id="dbg-count">0/1</span>
+              </header>
+              <div id="dbg-today"></div>
             </section>
             <section class="panel group" aria-labelledby="bq-h">
               <header class="group-head">

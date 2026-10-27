@@ -1,0 +1,22 @@
+{
+  "title": "Library late fees",
+  "language": "python",
+  "difficulty": "medium",
+  "order": 9,
+  "summary": "Members are charged late fees on the due date, and late books cost one day too much.",
+  "bugs": [
+    {
+      "type": "off-by-one",
+      "file": "utils/dates.py",
+      "find": "return (end - start).days + 1",
+      "replace": "return (end - start).days",
+      "crossFile": true
+    },
+    {
+      "type": "wrong-conditional",
+      "file": "services/loans.py",
+      "find": "return today >= due_date(loan)",
+      "replace": "return today > due_date(loan)"
+    }
+  ]
+}

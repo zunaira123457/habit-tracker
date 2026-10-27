@@ -1,0 +1,22 @@
+{
+  "title": "Rate limiter",
+  "language": "python",
+  "difficulty": "medium",
+  "order": 19,
+  "summary": "Clients get blocked long after they should be allowed again.",
+  "bugs": [
+    {
+      "type": "wrong-data-structure",
+      "file": "utils/window.py",
+      "find": "        while self.times and self._expired(self.times[-1], now):\n            self.times.pop()\n",
+      "replace": "        while self.times and self._expired(self.times[0], now):\n            self.times.pop(0)\n",
+      "crossFile": true
+    },
+    {
+      "type": "off-by-one",
+      "file": "utils/window.py",
+      "find": "        return t < now - self.seconds\n",
+      "replace": "        return t <= now - self.seconds\n"
+    }
+  ]
+}

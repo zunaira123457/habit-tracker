@@ -1,0 +1,15 @@
+{
+  "title": "Carts that share items",
+  "language": "python",
+  "difficulty": "easy",
+  "order": 5,
+  "summary": "Items added to one customer's cart appear in other customers' carts.",
+  "bugs": [
+    {
+      "type": "mutation-aliasing",
+      "file": "models/cart.py",
+      "find": "    def __init__(self, owner, items=[]):\n        self.owner = owner\n        self.items = items\n",
+      "replace": "    def __init__(self, owner, items=None):\n        self.owner = owner\n        self.items = list(items) if items else []\n"
+    }
+  ]
+}

@@ -284,10 +284,11 @@ function dayParts(k) {
   const pr = k === state.currentDay ? (prep.enabled ? { level: prepLevel(k), ...dayProgressOf(k) } : null) : state.history[k]?.prep;
   if (pr && rows) {
     const lc = pr.leetcode || { done: 0, total: 0 }, bq = pr.behavioral || { done: 0, total: 0 };
-    const parts = lc.total + bq.total ? (lc.done + bq.done) / (lc.total + bq.total) * 100 : 0;
+    const dg = pr.debugging || { done: 0, total: 0 };
+    const parts = lc.total + bq.total + dg.total ? (lc.done + bq.done + dg.done) / (lc.total + bq.total + dg.total) * 100 : 0;
     body = `<ul class="d-list"><li class="d-row ${pr.level === 'full' ? 'done' : ''}"><span class="row-emoji" aria-hidden="true">🧩</span>
       <div style="min-width:0"><div class="row-name">Interview Prep<span class="req">${ic('lock')}${pr.level === 'full' ? 'Full day' : pr.level === 'light' ? 'Light day' : 'Not done'}</span></div><div class="pbar"><div class="pfill" style="width:${parts}%"></div></div></div>
-      <span class="d-v">${lc.done}/${lc.total} problems${bq.total ? ` · ${bq.done}/${bq.total} behavioral` : ''}${pr.level !== 'none' ? ic('check') : ''}</span></li></ul>` + body;
+      <span class="d-v">${lc.done}/${lc.total} problems${pr.debugging?.total ? ` · ${pr.debugging.done ? 'bug fixed' : 'bug open'}` : ''}${bq.total ? ` · ${bq.done}/${bq.total} behavioral` : ''}${pr.level !== 'none' ? ic('check') : ''}</span></li></ul>` + body;
   }
   return { title: longDate(k), tag, body };
 }
@@ -462,7 +463,7 @@ window.addEventListener('resize', () => { if (isDesktop()) app.classList.remove(
 /* ================= Navigation & boot ================= */
 const VIEWS = {
   today: () => ({ title: 'Today', sub: `${greeting()} · ${new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}` }),
-  prep: () => ({ title: 'Interview Prep', sub: 'Daily plan: 3 NeetCode problems + 2 behavioral questions' }),
+  prep: () => ({ title: 'Interview Prep', sub: 'Daily plan: 3 NeetCode problems, 1 debugging challenge, 2 behavioral questions' }),
   history: () => ({ title: 'History', sub: 'Your streak, day by day' }),
   settings: () => ({ title: 'Settings', sub: 'Tasks, appearance and data' }),
 };

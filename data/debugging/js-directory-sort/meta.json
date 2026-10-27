@@ -1,0 +1,16 @@
+{
+  "title": "Staff directory order",
+  "language": "javascript",
+  "difficulty": "easy",
+  "order": 8,
+  "summary": "The staff directory isn't in alphabetical order.",
+  "bugs": [
+    {
+      "type": "wrong-conditional",
+      "file": "utils/compare.js",
+      "find": "  return a.lastName > b.lastName;",
+      "replace": "  return a.lastName.localeCompare(b.lastName) || a.firstName.localeCompare(b.firstName);",
+      "crossFile": true
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Async worker pool",
+  "language": "python",
+  "difficulty": "hard",
+  "order": 27,
+  "summary": "Image jobs come back in the wrong order and the job counter undercounts.",
+  "bugs": [
+    {
+      "type": "async-race",
+      "file": "services/pool.py",
+      "find": "    await asyncio.gather(*(run_one(j) for j in jobs))\n    return results\n",
+      "replace": "    return list(await asyncio.gather(*(run_one(j) for j in jobs)))\n"
+    },
+    {
+      "type": "async-race",
+      "file": "utils/stats.py",
+      "find": "        current = self.completed\n        await asyncio.sleep(0)  # e.g. writing a metrics event\n        self.completed = current + 1\n",
+      "replace": "        self.completed += 1\n        await asyncio.sleep(0)  # e.g. writing a metrics event\n",
+      "crossFile": true
+    }
+  ]
+}

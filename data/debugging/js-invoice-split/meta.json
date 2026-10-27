@@ -1,0 +1,22 @@
+{
+  "title": "Lost cents",
+  "language": "javascript",
+  "difficulty": "medium",
+  "order": 20,
+  "summary": "Invoice totals are a cent short and split bills don't add up to the total.",
+  "bugs": [
+    {
+      "type": "edge-case",
+      "file": "utils/currency.js",
+      "find": "  return Math.floor(amount * 100);",
+      "replace": "  return Math.round(amount * 100);",
+      "crossFile": true
+    },
+    {
+      "type": "edge-case",
+      "file": "services/invoice.js",
+      "find": "  const share = Math.floor(totalCents / people);\n  return Array(people).fill(share);\n",
+      "replace": "  const base = Math.floor(totalCents / people);\n  const extra = totalCents % people;\n  return Array.from({ length: people }, (_, i) => base + (i < extra ? 1 : 0));\n"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": "The growing monthly fee",
+  "language": "python",
+  "difficulty": "medium",
+  "order": 15,
+  "summary": "A bank's monthly fee gets bigger every time it's charged.",
+  "bugs": [
+    {
+      "type": "mutation-aliasing",
+      "file": "models/money.py",
+      "find": "    def add(self, other):\n        self.cents += other.cents\n        return self\n",
+      "replace": "    def add(self, other):\n        return Money(self.cents + other.cents)\n",
+      "crossFile": true
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Async profile cache",
+  "language": "python",
+  "difficulty": "hard",
+  "order": 21,
+  "summary": "A cache in front of a slow profile API hits the API far more than it should.",
+  "bugs": [
+    {
+      "type": "async-race",
+      "file": "services/cache.py",
+      "find": "        value = await self.loader(key)\n",
+      "replace": "        task = asyncio.ensure_future(self.loader(key))\n        self.inflight[key] = task\n        try:\n            value = await task\n        finally:\n            del self.inflight[key]\n"
+    },
+    {
+      "type": "wrong-conditional",
+      "file": "services/cache.py",
+      "find": "            if self.clock.now() - stored_at > self.ttl:\n",
+      "replace": "            if self.clock.now() - stored_at < self.ttl:\n"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Skipped listeners",
+  "language": "javascript",
+  "difficulty": "medium",
+  "order": 18,
+  "summary": "Low-stock alerts sometimes don't reach the warehouse team.",
+  "bugs": [
+    {
+      "type": "mutation-aliasing",
+      "file": "utils/emitter.js",
+      "find": "    const list = this.listeners[event] || [];",
+      "replace": "    const list = [...(this.listeners[event] || [])];",
+      "crossFile": true
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Fewest stops",
+  "language": "javascript",
+  "difficulty": "hard",
+  "order": 28,
+  "summary": "The transit planner suggests routes with extra stops, and crashes near the end of a line.",
+  "bugs": [
+    {
+      "type": "wrong-data-structure",
+      "file": "services/routes.js",
+      "find": "    const path = queue.pop();",
+      "replace": "    const path = queue.shift();"
+    },
+    {
+      "type": "edge-case",
+      "file": "models/network.js",
+      "find": "    return this.edges.get(station);",
+      "replace": "    return this.edges.get(station) || [];",
+      "crossFile": true
+    }
+  ]
+}

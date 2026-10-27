@@ -1,0 +1,15 @@
+{
+  "title": "Restock report",
+  "language": "python",
+  "difficulty": "easy",
+  "order": 1,
+  "summary": "A warehouse restock report skips some items that need ordering.",
+  "bugs": [
+    {
+      "type": "wrong-conditional",
+      "file": "services/inventory.py",
+      "find": "return item.quantity < item.reorder_level",
+      "replace": "return item.quantity <= item.reorder_level"
+    }
+  ]
+}

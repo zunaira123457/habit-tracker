@@ -1,0 +1,22 @@
+{
+  "title": "Shared shopping carts",
+  "language": "javascript",
+  "difficulty": "medium",
+  "order": 10,
+  "summary": "Changing the quantity in one cart changes it in another, and prices show as $1.5.",
+  "bugs": [
+    {
+      "type": "mutation-aliasing",
+      "file": "services/cart.js",
+      "find": "    const line = getProduct(sku);\n    line.qty = qty;\n",
+      "replace": "    const line = { ...getProduct(sku), qty };\n"
+    },
+    {
+      "type": "edge-case",
+      "file": "utils/money.js",
+      "find": "  return `$${cents / 100}`;",
+      "replace": "  return `$${(cents / 100).toFixed(2)}`;",
+      "crossFile": true
+    }
+  ]
+}

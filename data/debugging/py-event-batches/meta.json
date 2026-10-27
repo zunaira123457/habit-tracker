@@ -1,0 +1,22 @@
+{
+  "title": "Event batches",
+  "language": "python",
+  "difficulty": "medium",
+  "order": 13,
+  "summary": "Batches of event ids come out scrambled and the last batch goes missing.",
+  "bugs": [
+    {
+      "type": "wrong-data-structure",
+      "file": "services/dedupe.py",
+      "find": "return list(set(ids))",
+      "replace": "return list(dict.fromkeys(ids))"
+    },
+    {
+      "type": "off-by-one",
+      "file": "utils/chunks.py",
+      "find": "range(0, len(items) - size, size)",
+      "replace": "range(0, len(items), size)",
+      "crossFile": true
+    }
+  ]
+}

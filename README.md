@@ -152,11 +152,12 @@ A daily coding-interview plan that counts toward your streak like a non-negotiab
 - **Each card** has the difficulty, category, an *Open on LeetCode* link (plus a free NeetCode link for the 7 Premium problems), a timer, and **Solved / Struggled / Skip**. Skipping a new problem swaps in the next one; skipping a review moves it to tomorrow.
 - **Progress:** problems solved out of 250, progress per category, and a projected finish date at your recent pace.
 - **AI help in three steps:** a hint toward the pattern, then an approach outline, then a full explanation. Each level unlocks only after the previous one.
+- **1 debugging challenge a day.** 30 small multi-file projects (15 Python, 15 JavaScript, easy → hard), each with 1–2 planted bugs: off-by-one errors, wrong conditionals, mutation and aliasing, async races, edge cases, wrong data structures, and bugs where the error shows up in one file but the cause is in another. You fix them in a built-in code editor (CodeMirror), run the visible tests, then **Submit** to grade against a hidden test suite that runs in your browser (JavaScript in a Web Worker, Python via Pyodide). The AI then reviews your diff: did you fix the root cause or patch a symptom, what did you miss, and how would an interviewer see it. Hints come in the same three steps, and you can view the official solution if you're stuck.
 - **2 behavioral questions a day** from a bank of 104, across 13 themes (conflict, failure, leadership, ambiguity, ownership, tight deadlines, disagreeing with a manager and more). Themes rotate so the same one doesn't come back for about a week, and a question you've seen isn't repeated for at least a month, unless your answer scored below 6, which brings it back after two weeks.
 - **Answer by typing or speaking.** Voice answers use your browser's speech recognition (Chrome, Edge or Safari; Chrome sends the audio to Google to transcribe it). You see the live transcript and can fix misheard words. No audio is saved.
 - **AI feedback on every answer:** a score from 1 to 10; a rubric for STAR structure, specificity, your personal impact ("I" vs "we"), measurable results and length (aim for 1.5–2.5 minutes); 2–3 concrete improvements; and a stronger rewrite that uses only your real details, with [brackets] where you should add a number or fact. Spoken answers also get notes on filler words and pacing. Word counts, length, "I"/"we" counts, words per minute and filler words are measured by the app itself, not guessed by the AI.
 - **Story library:** every attempt is saved with its feedback. See your score history per question, your average over the last 10 answers, your strongest and weakest themes, and star your best answers as stories to reuse.
-- **Full vs. light days:** finishing all 3 problems and both questions is a full day (10 XP). Meeting the light-day minimum (1 problem + 1 behavioral question by default, adjustable in Settings) still keeps the streak and earns 4 XP.
+- **Full vs. light days:** finishing all 3 problems, the debugging challenge and both questions is a full day (10 XP). Meeting the light-day minimum (1 problem + 1 behavioral question by default, adjustable in Settings) still keeps the streak and earns 4 XP.
 
 ### History calendar
 
@@ -240,6 +241,7 @@ npx vercel deploy --prod
 ## Tech details
 
 - **No framework, no build step**: plain HTML, CSS and JavaScript modules in the browser, plus Vercel serverless functions for AI.
+- **Every debugging challenge is validated** by `npm run validate:challenges`, which proves the hidden tests fail on the buggy code, pass on the fix, and catch **each** bug on its own, using the same test runners the browser uses.
 - **The cat is drawn entirely in SVG** by code. There are no image files, and its idle animations (blinking, breathing, tail swishing) are CSS animations.
 - **Responsive layout** with CSS Grid and container queries:
   - **Desktop (1024px and up):** sidebar plus a dashboard grid with a right-hand panel.
@@ -258,7 +260,10 @@ habit-tracker/
 ├── api/                  # serverless functions; api/_lib/ai-service.js is the only AI provider code
 ├── prompts/              # one system prompt per AI feature
 ├── data/neetcode250.json # the NeetCode 250 list, verified against LeetCode
-├── scripts/              # maintenance scripts (link verification)
+├── data/behavioral.json  # 104 behavioral questions in 13 themes
+├── data/debugging/       # 30 challenges: src/, hidden/ tests, solution/, description.md, SOLUTION.md
+├── vendor/codemirror.js  # bundled code editor (rebuild with npm run build:editor)
+├── scripts/              # link verification, challenge validation, editor bundle
 └── screenshots/          # images used in this README
 ```
 

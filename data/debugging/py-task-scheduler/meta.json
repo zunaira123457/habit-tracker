@@ -1,0 +1,22 @@
+{
+  "title": "Build task scheduler",
+  "language": "python",
+  "difficulty": "hard",
+  "order": 25,
+  "summary": "The build planner drops tasks when a dependency is listed twice and loops silently on cycles.",
+  "bugs": [
+    {
+      "type": "edge-case",
+      "file": "utils/graph.py",
+      "find": "    for before, after in deps:\n        graph[before][after] = True\n        indegree[after] += 1\n",
+      "replace": "    for before, after in deps:\n        if after not in graph[before]:\n            graph[before][after] = True\n            indegree[after] += 1\n",
+      "crossFile": true
+    },
+    {
+      "type": "edge-case",
+      "file": "services/scheduler.py",
+      "find": "    return order\n",
+      "replace": "    if len(order) != len(tasks):\n        raise ValueError(\"cycle detected\")\n    return order\n"
+    }
+  ]
+}

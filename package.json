@@ -4,9 +4,21 @@
   "type": "module",
   "scripts": {
     "serve": "vercel dev --listen 5179",
-    "verify:links": "node scripts/verify-links.mjs"
+    "verify:links": "node scripts/verify-links.mjs",
+    "build:editor": "node scripts/build-editor.mjs",
+    "validate:challenges": "node scripts/validate-challenges.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "@codemirror/lang-javascript": "^6.2.5",
+    "@codemirror/lang-python": "^6.2.1",
+    "@codemirror/language": "^6.13.1",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.15",
+    "@lezer/highlight": "^1.2.5",
+    "codemirror": "^6.0.2",
+    "esbuild": "^0.28.2"
   }
 }

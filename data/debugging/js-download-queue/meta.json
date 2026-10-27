@@ -1,0 +1,21 @@
+{
+  "title": "Download queue",
+  "language": "javascript",
+  "difficulty": "hard",
+  "order": 22,
+  "summary": "A concurrency-limited download queue runs everything at once and returns results out of order.",
+  "bugs": [
+    {
+      "type": "async-race",
+      "file": "services/queue.js",
+      "find": "    task().then(resolve, reject);\n    this.running--;\n    this._next();\n",
+      "replace": "    Promise.resolve()\n      .then(task)\n      .then(resolve, reject)\n      .finally(() => {\n        this.running--;\n        this._next();\n      });\n"
+    },
+    {
+      "type": "async-race",
+      "file": "utils/map-limit.js",
+      "find": "  const results = [];\n  await Promise.all(items.map(item => queue.push(() => fn(item)).then(r => results.push(r))));\n  return results;\n",
+      "replace": "  return Promise.all(items.map(item => queue.push(() => fn(item))));\n"
+    }
+  ]
+}

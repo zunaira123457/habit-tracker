@@ -11,10 +11,11 @@ export function defaultPrep() {
   return {
     version: 1,
     enabled: true,                      // counts toward the streak as one more must-do
-    settings: { lightDay: { leetcode: 1, behavioral: 1 } },
+    settings: { lightDay: { leetcode: 1, behavioral: 1, debugging: 0 }, debugLanguage: 'both' },
     problems: {},                       // slug → { status, attempts: [{date, result, seconds}], review: {step, due} }
     days: {},                           // date → { leetcode: [slot], behavioral: [{ qid, answerId, draft }] }
     answers: {},                        // question id → [answer] (every attempt, with AI feedback)
+    debugging: {},                      // challenge id → { files (edits), submissions, hints, revealed, solvedOn, skipped }
     timer: null,                        // { date, slug, start } for the one running problem timer
   };
 }
@@ -34,15 +35,16 @@ export function replacePrep(next) { prep = next; }
 
 const slotDone = s => DONE_RESULTS.includes(s.result);
 
-export const SECTIONS = ['leetcode', 'behavioral'];
-export const SECTION_TARGET = { leetcode: 3, behavioral: 2 };
+export const SECTIONS = ['leetcode', 'debugging', 'behavioral'];
+export const SECTION_TARGET = { leetcode: 3, debugging: 1, behavioral: 2 };
 
 /** Per-section progress for a day: { leetcode: { done, total }, behavioral: { done, total } }. */
 export function dayProgress(date) {
   const d = prep.days[date] || {};
-  const lc = d.leetcode || [], bq = d.behavioral || [];
+  const lc = d.leetcode || [], bq = d.behavioral || [], dbg = d.debugging;
   return {
     leetcode: { done: lc.filter(slotDone).length, total: lc.length },
+    debugging: { done: dbg?.done ? 1 : 0, total: dbg ? 1 : 0 },
     behavioral: { done: bq.filter(s => s.answerId).length, total: bq.length },
   };
 }

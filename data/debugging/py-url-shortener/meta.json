@@ -1,0 +1,16 @@
+{
+  "title": "The first short link",
+  "language": "python",
+  "difficulty": "easy",
+  "order": 7,
+  "summary": "The very first shortened URL gets an empty code and can't be opened.",
+  "bugs": [
+    {
+      "type": "edge-case",
+      "file": "utils/base62.py",
+      "find": "    chars = []\n    while n > 0:\n",
+      "replace": "    if n == 0:\n        return ALPHABET[0]\n    chars = []\n    while n > 0:\n",
+      "crossFile": true
+    }
+  ]
+}

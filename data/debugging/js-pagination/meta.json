@@ -1,0 +1,16 @@
+{
+  "title": "Missing first page",
+  "language": "javascript",
+  "difficulty": "easy",
+  "order": 4,
+  "summary": "The product list skips the first page of results.",
+  "bugs": [
+    {
+      "type": "off-by-one",
+      "file": "utils/paginate.js",
+      "find": "  const start = page * pageSize;",
+      "replace": "  const start = (page - 1) * pageSize;",
+      "crossFile": true
+    }
+  ]
+}
