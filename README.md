@@ -4,7 +4,7 @@
 
 Paw Streak is a to-do tracker built around *non-negotiables*: the few things you promise yourself you'll do every single day. Finish all of them and your streak goes up. Miss one and it resets to zero. Your cat, Mochi, starts as a sleepy kitten in a basket and grows into a crowned, sparkling royal cat as your streak gets longer.
 
-**[▶ Open the live app](https://habit-tracker-lilac-kappa.vercel.app)**
+**[▶ Open the live app](https://habit-tracker-7jp3.vercel.app)**
 
 ![Paw Streak dashboard on desktop: today's tasks on the left, the cat, streak stats and a mini calendar on the right](screenshots/desktop-today.png)
 
