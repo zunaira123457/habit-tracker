@@ -54,7 +54,7 @@ The main dashboard. Tasks are on the left, grouped into **Non-negotiables** and 
 
 ### Dark mode, at the top level
 
-After 100+ days your cat becomes a **Legendary Royal** with a crown, cape and sparkles. When every non-negotiable is done for the day, the cat celebrates and confetti falls.
+After 100+ full days (1,000 XP) your cat becomes a **Legendary Royal** with a crown, cape and sparkles. When every non-negotiable is done for the day, the cat celebrates and confetti falls.
 
 ![Dark mode with a 131-day streak, all tasks complete, and the royal cat](screenshots/desktop-today-dark.png)
 
@@ -117,20 +117,20 @@ Your **longest streak** is remembered separately, so a reset never erases your r
 
 ### The growing cat
 
-Your cat's size and look depend on your **current streak**:
+Your cat grows with **XP**. Every kept day earns XP: **10 for a full day**, **4 for a light day** (see [Interview Prep](#interview-prep)). XP is never lost, so missing a day resets your streak but doesn't shrink your cat. It just looks sad for a day.
 
 ![The six growth stages of the cat, from a kitten sleeping in a basket to a royal cat with a crown and sparkles](screenshots/cat-stages.png)
 
-| Level | Stage | Streak | Look |
+| Level | Stage | XP (full days) | Look |
 |:---:|---|---|---|
-| 1 | Sleepy Bean | 0 days | A kitten curled up asleep in a basket |
-| 2 | Tiny Kitten | 1–6 days | A small kitten with a collar and bell |
-| 3 | Playful Kitty | 7–20 days | A young cat playing with a ball of yarn |
-| 4 | Grown Cat | 21–49 days | A full-grown cat |
-| 5 | Fluffy Noble | 50–99 days | A big, fluffy cat with a little crown |
-| 6 | Legendary Royal | 100+ days | A royal cat with a bigger crown, a cape and sparkles |
+| 1 | Sleepy Bean | 0 | A kitten curled up asleep in a basket |
+| 2 | Tiny Kitten | 10+ (1 day) | A small kitten with a collar and bell |
+| 3 | Playful Kitty | 70+ (7 days) | A young cat playing with a ball of yarn |
+| 4 | Grown Cat | 210+ (21 days) | A full-grown cat |
+| 5 | Fluffy Noble | 500+ (50 days) | A big, fluffy cat with a little crown |
+| 6 | Legendary Royal | 1,000+ (100 days) | A royal cat with a bigger crown, a cape and sparkles |
 
-The cat card also shows your cat's **name**, its **level**, and **how many days until the next stage**.
+The cat card also shows your cat's **name**, its **level**, its total **XP**, and **how much XP until the next stage**.
 
 **The cat reacts to what you do:**
 
@@ -142,6 +142,17 @@ The cat card also shows your cat's **name**, its **level**, and **how many days 
 - 😸 **Happy** with sparkles once all of today's non-negotiables are done.
 - 🎉 It **hops** each time you finish a task and **celebrates with confetti** when you finish the last non-negotiable.
 - 🐾 **Click or tap the cat** to pet it.
+
+### Interview Prep
+
+A daily coding-interview plan that counts toward your streak like a non-negotiable (you can turn that off in Settings).
+
+- **NeetCode 250, every day:** 2 new problems in NeetCode's roadmap order (easier first within each category) plus 1 review. All 250 links are checked against LeetCode's API (`npm run verify:links`).
+- **Spaced repetition:** a solved problem comes back after 1, 3, 7 and 21 days. Marking it **Struggled** restarts that schedule at 1 day.
+- **Each card** has the difficulty, category, an *Open on LeetCode* link (plus a free NeetCode link for the 7 Premium problems), a timer, and **Solved / Struggled / Skip**. Skipping a new problem swaps in the next one; skipping a review moves it to tomorrow.
+- **Progress:** problems solved out of 250, progress per category, and a projected finish date at your recent pace.
+- **AI help in three steps:** a hint toward the pattern, then an approach outline, then a full explanation. Each level unlocks only after the previous one.
+- **Full vs. light days:** finishing all 3 problems is a full day (10 XP). Doing at least the light-day minimum (1 problem by default, adjustable in Settings) still keeps the streak and earns 4 XP.
 
 ### History calendar
 
@@ -170,8 +181,9 @@ On desktop:
 | Key | Action |
 |:---:|---|
 | `1` | Go to Today |
-| `2` | Go to History |
-| `3` | Go to Settings |
+| `2` | Go to Interview Prep |
+| `3` | Go to History |
+| `4` | Go to Settings |
 | `N` | New task |
 | `Esc` | Close a dialog or panel |
 | `Enter` | Add the amount typed in a task's box |
@@ -188,21 +200,30 @@ On desktop:
 
 ## Running it yourself
 
-The whole app is a **single file**, [`index.html`](index.html), with all the HTML, CSS and JavaScript inside. There is nothing to install and no build step.
+The app is plain HTML, CSS and JavaScript modules with no build step. The AI features run in small Vercel serverless functions in [`api/`](api/), so the API key never reaches the browser.
 
-**Option 1: open it directly.** Download `index.html` and double-click it to open it in your browser.
-
-**Option 2: serve it locally.**
+**1. Install and configure**
 
 ```bash
 git clone https://github.com/zunaira123457/habit-tracker.git
 cd habit-tracker
-python3 -m http.server 8000
+npm install
+cp .env.example .env
 ```
 
-Then open <http://localhost:8000>.
+Fill in `.env`: `ANTHROPIC_API_KEY`, and an `APP_PASSCODE` of your choice. Or set `MOCK_AI=1` to try everything with canned AI answers and no key.
 
-**Option 3: deploy it.** Any static host works (Vercel, Netlify, GitHub Pages and so on), because it's just one HTML file. The live version is deployed on Vercel:
+**2. Run it**
+
+```bash
+npm run serve
+```
+
+Then open <http://localhost:5179> and enter the same passcode under **Settings → Interview Prep → AI passcode**.
+
+> Opening `index.html` by double-clicking no longer works: browsers block JavaScript modules on `file://` pages. Use `npm run serve`, or any static server if you don't need the AI features.
+
+**3. Deploy.** The live version is on Vercel. Set `ANTHROPIC_API_KEY` and `APP_PASSCODE` in the Vercel project's Environment Variables, then:
 
 ```bash
 npx vercel deploy --prod
@@ -214,7 +235,7 @@ npx vercel deploy --prod
 
 ## Tech details
 
-- **One self-contained HTML file**: plain HTML, CSS and JavaScript, with no frameworks and no dependencies.
+- **No framework, no build step**: plain HTML, CSS and JavaScript modules in the browser, plus Vercel serverless functions for AI.
 - **The cat is drawn entirely in SVG** by code. There are no image files, and its idle animations (blinking, breathing, tail swishing) are CSS animations.
 - **Responsive layout** with CSS Grid and container queries:
   - **Desktop (1024px and up):** sidebar plus a dashboard grid with a right-hand panel.
@@ -227,9 +248,14 @@ npx vercel deploy --prod
 
 ```
 habit-tracker/
-├── index.html        # the entire app
-├── README.md         # this file
-└── screenshots/      # images used in this README
+├── index.html            # page markup
+├── css/app.css           # all styles
+├── js/                   # app modules (store, cat, ui, app) and js/prep/ for Interview Prep
+├── api/                  # serverless functions; api/_lib/ai-service.js is the only AI provider code
+├── prompts/              # one system prompt per AI feature
+├── data/neetcode250.json # the NeetCode 250 list, verified against LeetCode
+├── scripts/              # maintenance scripts (link verification)
+└── screenshots/          # images used in this README
 ```
 
 ---

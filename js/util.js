@@ -16,6 +16,10 @@ export const EPS = 1e-6;
 
 export const ICONS = {
   today: '<circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/>',
+  code: '<path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16"/>',
+  external: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  flag: '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+  bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/>',
   calendar: '<rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/>',
   sliders: '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
@@ -43,7 +47,8 @@ export const ICONS = {
 };
 export const ic = name => `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name] || ''}</svg>`;
 
-export const THRESH = [0, 1, 7, 21, 50, 100];
+// XP needed for each cat stage (a full day is 10 XP, so these match 1/7/21/50/100 full days).
+export const THRESH = [0, 10, 70, 210, 500, 1000];
 export const STAGES = [
   { name: 'Sleepy Bean' },
   { name: 'Tiny Kitten',     s: .62, head: 44, bx: 30, by: 26, collar: true },

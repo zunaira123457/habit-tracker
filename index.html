@@ -20,8 +20,9 @@
     <div class="brand"><span class="brand-mark" aria-hidden="true">🐱</span><span class="brand-name lbl">Paw Streak</span></div>
     <nav aria-label="Main" style="display:flex;flex-direction:column;gap:2px">
       <button class="nav-item" data-view="today" title="Today (1)"><span data-icon="today"></span><span class="lbl lbl-text">Today</span><kbd class="lbl kb-only">1</kbd></button>
-      <button class="nav-item" data-view="history" title="History (2)"><span data-icon="calendar"></span><span class="lbl lbl-text">History</span><kbd class="lbl kb-only">2</kbd></button>
-      <button class="nav-item" data-view="settings" title="Settings (3)"><span data-icon="sliders"></span><span class="lbl lbl-text">Settings</span><kbd class="lbl kb-only">3</kbd></button>
+      <button class="nav-item" data-view="prep" title="Interview Prep (2)"><span data-icon="code"></span><span class="lbl lbl-text">Interview Prep</span><kbd class="lbl kb-only">2</kbd></button>
+      <button class="nav-item" data-view="history" title="History (3)"><span data-icon="calendar"></span><span class="lbl lbl-text">History</span><kbd class="lbl kb-only">3</kbd></button>
+      <button class="nav-item" data-view="settings" title="Settings (4)"><span data-icon="sliders"></span><span class="lbl lbl-text">Settings</span><kbd class="lbl kb-only">4</kbd></button>
     </nav>
     <div class="sb-section lbl">Streak</div>
     <div class="sb-streak lbl">
@@ -49,6 +50,7 @@
       <section id="view-today" class="view active" aria-labelledby="page-title">
         <div class="today-grid">
           <div class="area-tasks">
+            <section class="panel group" id="prep-check" aria-label="Interview Prep checklist"></section>
             <section class="panel group" aria-labelledby="nn-h">
               <header class="group-head">
                 <div><h2 id="nn-h">Non-negotiables</h2><p>Complete all of these to keep your streak</p></div>
@@ -70,7 +72,7 @@
               <div class="cat-stage"><div id="cat-wrap" role="button" tabindex="0" aria-label="Pet your cat"></div></div>
               <div>
                 <div class="cat-meta"><div class="cat-name" id="cat-name"></div><span class="lvl" id="cat-level"></span></div>
-                <div class="cat-streak" id="cat-streak-wrap"><span data-icon="flame"></span><span><b id="cat-streak">0</b> day streak</span></div>
+                <div class="cat-streak" id="cat-streak-wrap"><span data-icon="flame"></span><span><b id="cat-streak">0</b> day streak</span><span class="cat-xp" id="cat-xp"></span></div>
                 <div class="bubble" id="cat-bubble" aria-live="polite"></div>
                 <div class="next">
                   <div class="next-row"><span id="cat-next"></span></div>
@@ -89,6 +91,25 @@
               <div class="mini-grid" id="mini-grid"></div>
             </div>
           </section>
+        </div>
+      </section>
+
+      <!-- ================= INTERVIEW PREP ================= -->
+      <section id="view-prep" class="view" aria-labelledby="page-title">
+        <div class="prep-grid">
+          <div class="prep-main">
+            <section class="panel group" aria-labelledby="lc-h">
+              <header class="group-head">
+                <div><h2 id="lc-h">Today's NeetCode problems</h2><p>2 new in roadmap order + 1 review, resurfaced after 1, 3, 7 and 21 days</p></div>
+                <span class="count" id="lc-count">0/0</span>
+              </header>
+              <div class="prob-list" id="lc-list"></div>
+            </section>
+          </div>
+          <aside class="prep-side">
+            <section class="panel" id="lc-progress" aria-label="NeetCode 250 progress"></section>
+            <section class="panel" id="lc-cats" aria-label="Progress by category"></section>
+          </aside>
         </div>
       </section>
 
@@ -139,6 +160,11 @@
             </div>
           </section>
 
+          <section class="panel" aria-labelledby="set-prep">
+            <div class="panel-head"><div><h2 id="set-prep">Interview Prep</h2><p>Streak rules and AI access</p></div></div>
+            <div id="prep-settings"></div>
+          </section>
+
           <section class="panel" aria-labelledby="set-tasks">
             <div class="panel-head"><div><h2 id="set-tasks">Tasks</h2><p>What shows up on your Today list</p></div><button class="btn btn-secondary btn-sm" data-new="any"><span data-icon="plus"></span>New task</button></div>
             <ul class="admin-list" id="task-admin"></ul>
@@ -148,8 +174,9 @@
             <div class="panel-head"><div><h2 id="set-kb">Keyboard shortcuts</h2><p>Work faster on desktop</p></div></div>
             <ul class="shortcuts">
               <li>Go to Today <span><kbd>1</kbd></span></li>
-              <li>Go to History <span><kbd>2</kbd></span></li>
-              <li>Go to Settings <span><kbd>3</kbd></span></li>
+              <li>Go to Interview Prep <span><kbd>2</kbd></span></li>
+              <li>Go to History <span><kbd>3</kbd></span></li>
+              <li>Go to Settings <span><kbd>4</kbd></span></li>
               <li>New task <span><kbd>N</kbd></span></li>
               <li>Close dialog <span><kbd>Esc</kbd></span></li>
               <li>Add amount <span><kbd>Enter</kbd></span></li>
@@ -171,6 +198,7 @@
   <!-- ================= Mobile tab bar ================= -->
   <nav class="tabbar" aria-label="Main">
     <button data-view="today"><span data-icon="today"></span>Today</button>
+    <button data-view="prep"><span data-icon="code"></span>Prep</button>
     <button data-view="history"><span data-icon="calendar"></span>History</button>
     <button data-view="settings"><span data-icon="sliders"></span>Settings</button>
   </nav>

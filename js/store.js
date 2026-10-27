@@ -1,5 +1,6 @@
 'use strict';
 import { EPS, KEY, THRESH, UI_KEY, addDays, parseKey, todayKey, uid } from './util.js';
+import { XP, prep, prepLevel, dayProgress } from './prep/state.js';
 
 /* ================= State ================= */
 export function defaultState() {
@@ -40,8 +41,25 @@ export function val(t) {
   return v;
 }
 export const isDone = t => val(t) >= t.target - EPS;
-export const dayOK = (tasks, getV) => { const nn = tasks.filter(t => t.nonneg); return nn.length > 0 && nn.every(t => getV(t) >= t.target - EPS); };
-export const todayOK = () => dayOK(state.tasks, val);
+/**
+ * How a day went: 'full', 'light' or 'none'. With Interview Prep on, the prep plan is one more
+ * must-do alongside the habit non-negotiables, and its level (full/light) decides the day's XP.
+ */
+export function dayLevel(tasks, getV, date) {
+  const nn = tasks.filter(t => t.nonneg);
+  const habitsDone = nn.every(t => getV(t) >= t.target - EPS);
+  if (!prep.enabled) return nn.length > 0 && habitsDone ? 'full' : 'none';
+  return habitsDone ? prepLevel(date) : 'none';
+}
+export const todayLevel = () => dayLevel(state.tasks, val, state.currentDay);
+export const todayOK = () => todayLevel() !== 'none';
+export const xpFor = level => level === 'full' ? XP.full : level === 'light' ? XP.light : 0;
+/** Total XP: each past kept day (stored, or 10 for days from before XP existed) plus today's so far. */
+export function totalXP() {
+  let xp = 0;
+  for (const h of Object.values(state.history)) xp += h.xp ?? (h.ok ? XP.full : 0);
+  return xp + xpFor(todayLevel());
+}
 
 /* ================= Day rollover & streaks ================= */
 export function commitTimer(endTs = Date.now()) {
@@ -57,8 +75,10 @@ export function rollover() {
   // credit a running timer only up to midnight of the day it belonged to
   if (state.timer) commitTimer(Math.min(Date.now(), parseKey(addDays(day, 1)).getTime()));
   const getV = t => state.progress[t.id] || 0;
+  const level = dayLevel(state.tasks, getV, day);
   state.history[day] = {
-    ok: dayOK(state.tasks, getV),
+    ok: level !== 'none', level, xp: xpFor(level),
+    prep: prep.enabled ? { level: prepLevel(day), ...dayProgress(day) } : null,
     tasks: state.tasks.map(t => ({ name: t.name, emoji: t.emoji, type: t.type, target: t.target, unit: unitOf(t), nonneg: t.nonneg, value: Math.round(getV(t) * 100) / 100 })),
   };
   // days the app was never opened count as missed
@@ -84,7 +104,8 @@ export function longestFromHistory() {
   }
   state.longest = Math.max(state.longest || 0, best);
 }
-export function stageOf(s) { let st = 0; THRESH.forEach((t, i) => { if (s >= t) st = i; }); return st; }
+/** Cat stage from total XP. */
+export function stageOf(xp) { let st = 0; THRESH.forEach((t, i) => { if (xp >= t) st = i; }); return st; }
 export function catMood(s) {
   if (todayOK()) return 'happy';
   const y = state.history[addDays(state.currentDay, -1)];

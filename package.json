@@ -1,0 +1,12 @@
+{
+  "name": "paw-streak",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "serve": "vercel dev --listen 5179",
+    "verify:links": "node scripts/verify-links.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.0.0"
+  }
+}

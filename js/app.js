@@ -1,6 +1,10 @@
 'use strict';
 import { $, $$, EMOJIS, EPS, KEY, STAGES, THRESH, esc, ic, keyOf, pad, parseKey, uid } from './util.js';
-import { catMood, commitTimer, currentStreak, defaultState, findTask, isDone, longestFromHistory, replaceState, rollover, save, saveUI, stageOf, state, todayOK, ui, unitOf, updateLongest, val } from './store.js';
+import { catMood, commitTimer, currentStreak, defaultState, findTask, isDone, longestFromHistory, replaceState, rollover, save, saveUI, stageOf, state, todayLevel, todayOK, totalXP, ui, unitOf, updateLongest, val, xpFor } from './store.js';
+import { XP, defaultPrep, prep, prepLevel, replacePrep, savePrep } from './prep/state.js';
+import { initPrep, renderChecklist, renderPrep, renderPrepSettings } from './prep/view.js';
+import { dayProgress } from './prep/state.js';
+const dayProgressOf = k => dayProgress(k).leetcode;
 import { catSVG } from './cat.js';
 import { closeOverlay, confetti, confirmModal, openOverlay, overlay, toast, trapFocus } from './ui.js';
 
@@ -78,26 +82,30 @@ let catKey = '';
 function catMessage(s, mood) {
   const name = state.catName || 'Kitty';
   const nn = state.tasks.filter(t => t.nonneg);
-  if (!nn.length) return `Add a non-negotiable so ${name} can start growing.`;
-  if (mood === 'happy') return s >= 100 ? `All hail the streak! ${s} days of greatness. 👑` : `Purrfect! Today's streak is safe. 🎉`;
+  if (!nn.length && !prep.enabled) return `Add a non-negotiable so ${name} can start growing.`;
+  if (mood === 'happy') return s >= 100 ? `All hail the streak! ${s} days of greatness. 👑`
+    : todayLevel() === 'light' ? `Light day logged, streak safe! Finish the full plan for ${XP.full - XP.light} more XP.` : `Purrfect! Today's streak is safe. 🎉`;
   if (mood === 'sad') return `${name} feels a little sad. The streak reset, so let's start fresh today. 💕`;
-  const left = nn.filter(t => !isDone(t)).length;
+  const prepLeft = prep.enabled && prepLevel(state.currentDay) === 'none';
+  const left = nn.filter(t => !isDone(t)).length + (prepLeft ? 1 : 0);
+  if (left === 1 && prepLeft) return `Just Interview Prep left today. ${name} believes in you! ✨`;
   if (mood === 'sleep') return `${name} is snoozing. Finish your non-negotiables to start a streak. 💤`;
   return `${left} non-negotiable${left > 1 ? 's' : ''} left today. ${name} believes in you! ✨`;
 }
 function renderCat() {
-  const s = currentStreak(), st = stageOf(s), mood = catMood(s), k = st + '|' + mood + '|' + state.catName;
+  const s = currentStreak(), xp = totalXP(), st = stageOf(xp), mood = catMood(s), k = st + '|' + mood + '|' + state.catName;
   if (k !== catKey) { $('#cat-wrap').innerHTML = catSVG(st, mood); catKey = k; }
   $('#cat-name').textContent = state.catName || 'Kitty';
   $('#cat-level').textContent = `Level ${st + 1} · ${STAGES[st].name}`;
   if (st < 5) {
-    const need = THRESH[st + 1] - s;
-    $('#cat-next').textContent = `${need} more day${need > 1 ? 's' : ''} until ${STAGES[st + 1].name}`;
-    $('#cat-next-bar').style.width = ((s - THRESH[st]) / (THRESH[st + 1] - THRESH[st]) * 100) + '%';
+    const need = THRESH[st + 1] - xp, days = Math.ceil(need / XP.full);
+    $('#cat-next').textContent = `${need} XP until ${STAGES[st + 1].name} (about ${days} full day${days > 1 ? 's' : ''})`;
+    $('#cat-next-bar').style.width = ((xp - THRESH[st]) / (THRESH[st + 1] - THRESH[st]) * 100) + '%';
   } else {
     $('#cat-next').textContent = 'Max level reached. Legendary! 👑';
     $('#cat-next-bar').style.width = '100%';
   }
+  $('#cat-xp').textContent = `${xp} XP`;
   if (Date.now() >= tempMsgUntil) $('#cat-bubble').textContent = catMessage(s, mood);
 }
 function renderSummary() {
@@ -117,12 +125,13 @@ function renderToday() {
     : emptyState('🔒', 'No non-negotiables yet', 'Add a daily must-do. Completing all of them is what grows your streak and your cat.', 'Add non-negotiable', 'data-new="nn"');
   $('#reg-list').innerHTML = reg.length ? reg.map(taskRow).join('')
     : emptyState('🌸', 'No bonus tasks', 'Optional extras for good days. They never affect your streak.', 'Add bonus task', 'data-new="reg"');
+  renderChecklist();
   renderHeader(); renderCat(); renderSummary(); renderStats(); renderMiniCal();
 }
 
 /* completion tracking → reactions */
 const doneSet = new Set();
-let allDone = false;
+let allDone = false, lastLevel = null;
 function syncStatus(animate) {
   let newlyDone = null;
   state.tasks.forEach(t => {
@@ -130,8 +139,10 @@ function syncStatus(animate) {
     else doneSet.delete(t.id);
   });
   [...doneSet].forEach(id => { if (!findTask(id)) doneSet.delete(id); });
-  const nowAll = todayOK();
+  const level = todayLevel(), nowAll = level !== 'none';
   const celebrateNow = animate && nowAll && !allDone;
+  const upgraded = animate && allDone && lastLevel === 'light' && level === 'full';
+  lastLevel = level;
   const dayChanged = nowAll !== allDone;
   allDone = nowAll;
   updateLongest();
@@ -144,9 +155,13 @@ function syncStatus(animate) {
   }
   if (celebrateNow) {
     animateCat('party'); confetti();
-    say(`All non-negotiables done! 🎉 ${currentStreak()} day streak!`, 4000);
-    toast(`Streak updated: ${currentStreak()} day${currentStreak() > 1 ? 's' : ''} 🔥`, 'success');
+    say(level === 'full' ? `All non-negotiables done! 🎉 ${currentStreak()} day streak!` : `Light day logged. Streak safe! ${currentStreak()} days 🔥`, 4000);
+    toast(`Streak updated: ${currentStreak()} day${currentStreak() > 1 ? 's' : ''} 🔥 · +${xpFor(level)} XP${level === 'light' ? ' (light day)' : ''}`, 'success');
     save();
+  } else if (upgraded) {
+    animateCat('party'); confetti();
+    say('Full day complete! 🎉', 3000);
+    toast(`Full day complete: +${XP.full - XP.light} XP`, 'success');
   } else if (newlyDone) {
     animateCat('hop');
     say(`Yay, ${newlyDone.name} done! ${['💕', '✨', '🐾', '🌟'][Math.floor(Math.random() * 4)]}`);
@@ -266,6 +281,13 @@ function dayParts(k) {
         <span class="d-v">${v}${done ? ic('check') : ''}</span></li>`;
     }).join('')}</ul>` : '<p class="d-note">No tasks were set up on this day.</p>';
   } else body = `<p class="d-note">${note}</p>`;
+  const pr = k === state.currentDay ? (prep.enabled ? { level: prepLevel(k), leetcode: dayProgressOf(k) } : null) : state.history[k]?.prep;
+  if (pr && rows) {
+    const lc = pr.leetcode || { done: 0, total: 0 };
+    body = `<ul class="d-list"><li class="d-row ${pr.level === 'full' ? 'done' : ''}"><span class="row-emoji" aria-hidden="true">🧩</span>
+      <div style="min-width:0"><div class="row-name">Interview Prep<span class="req">${ic('lock')}${pr.level === 'full' ? 'Full day' : pr.level === 'light' ? 'Light day' : 'Not done'}</span></div><div class="pbar"><div class="pfill" style="width:${lc.total ? lc.done / lc.total * 100 : 0}%"></div></div></div>
+      <span class="d-v">${lc.done} / ${lc.total} problems${pr.level !== 'none' ? ic('check') : ''}</span></li></ul>` + body;
+  }
   return { title: longDate(k), tag, body };
 }
 function openDayDetail(k) {
@@ -292,6 +314,7 @@ $('#mini-grid').addEventListener('click', e => { const c = e.target.closest('.mi
 /* ================= SETTINGS ================= */
 function renderSettings() {
   const inp = $('#cat-name-input'); if (document.activeElement !== inp) inp.value = state.catName;
+  renderPrepSettings();
   $$('#theme-seg [data-theme-opt]').forEach(b => b.setAttribute('aria-pressed', b.dataset.themeOpt === ui.theme));
   $('#task-admin').innerHTML = state.tasks.length ? state.tasks.map(t => `
     <li class="admin-row" data-id="${t.id}">
@@ -326,6 +349,7 @@ $('#reset-all').onclick = () => confirmModal({
 }, () => {
   try { localStorage.removeItem(KEY); } catch (e) {}
   replaceState(defaultState()); save();
+  replacePrep(defaultPrep()); savePrep();
   doneSet.clear(); allDone = false; lastStreak = null; catKey = '';
   selectedDay = null;
   renderAll(); toast('All data reset. Fresh start! 🌱', 'success');
@@ -437,6 +461,7 @@ window.addEventListener('resize', () => { if (isDesktop()) app.classList.remove(
 /* ================= Navigation & boot ================= */
 const VIEWS = {
   today: () => ({ title: 'Today', sub: `${greeting()} · ${new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}` }),
+  prep: () => ({ title: 'Interview Prep', sub: 'Your daily NeetCode plan: 2 new problems + 1 review' }),
   history: () => ({ title: 'History', sub: 'Your streak, day by day' }),
   settings: () => ({ title: 'Settings', sub: 'Tasks, appearance and data' }),
 };
@@ -449,11 +474,13 @@ function showView(v) {
   const h = VIEWS[v]();
   $('#page-title').textContent = h.title; $('#page-sub').textContent = h.sub;
   document.title = `${h.title} · Paw Streak`;
-  $('#new-task-top').style.display = v === 'history' ? 'none' : '';
+  $('#new-task-top').style.display = v === 'history' || v === 'prep' ? 'none' : '';
   if (v === 'today') renderToday();
+  if (v === 'prep') renderPrep();
   if (v === 'history') renderHistory();
   if (v === 'settings') renderSettings();
   app.classList.remove('sb-open'); applySidebar();
+  if (location.hash !== '#' + v) history.replaceState(null, '', v === 'today' ? location.pathname : '#' + v);
   window.scrollTo({ top: 0 });
 }
 $$('[data-view]').forEach(b => b.addEventListener('click', () => showView(b.dataset.view)));
@@ -468,15 +495,15 @@ document.addEventListener('keydown', e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   const tg = e.target;
   if (tg.closest('input, textarea, select, [contenteditable="true"]')) return;
-  if (e.key === '1') showView('today');
-  else if (e.key === '2') showView('history');
-  else if (e.key === '3') showView('settings');
+  const byKey = { 1: 'today', 2: 'prep', 3: 'history', 4: 'settings' };
+  if (byKey[e.key]) showView(byKey[e.key]);
   else if (e.key === 'n' || e.key === 'N') { e.preventDefault(); openTaskForm(null); }
 });
 
 function renderAll() {
-  renderToday(); renderSettings(); renderHistory(); syncStatus(false);
+  renderToday(); renderSettings(); renderHistory(); renderPrep(); syncStatus(false);
 }
+document.addEventListener('prep:changed', () => { renderChecklist(); syncStatus(true); if (isActive('history')) renderCalendar(); refreshDayDetail(); });
 function checkNewDay() {
   if (rollover()) {
     const n = new Date(); viewMonth = { y: n.getFullYear(), m: n.getMonth() };
@@ -496,8 +523,10 @@ rollover();
 if (!state.startDate || state.startDate > state.currentDay) state.startDate = state.currentDay;
 longestFromHistory(); updateLongest(); save();
 applyTheme(); applySidebar();
+initPrep();
 renderAll();
-showView('today');
+showView(VIEWS[location.hash.slice(1)] ? location.hash.slice(1) : 'today');
+window.addEventListener('hashchange', () => { const v = location.hash.slice(1); if (VIEWS[v] && v !== currentView) showView(v); });
 
 setInterval(() => {
   if (checkNewDay()) return;
